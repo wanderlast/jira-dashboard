@@ -3,10 +3,10 @@ var JiraClient = require('jira-connector');
 
 var jira = new JiraClient( {
     host: 'issues.liferay.com',
-    basic_auth: {
+    /*basic_auth: {
         username: process.env.USERNAME,
         password: process.env.PASSWORD
-    }
+    }*/
 });
 
 function fetchIssues() {

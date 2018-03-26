@@ -1,5 +1,11 @@
+var filters = ["*"];
+var showAllButton;
+var showAllFilter = "*";
+
 $(document).ready(function() {
   var grid = $('.grid');
+
+  showAllButton = $('#show-all');
 
   issues.forEach(function(issue) {
     grid.append(
@@ -15,11 +21,63 @@ $(document).ready(function() {
     itemSelector: '.issue-element'
   });
 
-  $('#filters').on( 'click', 'button', function() {
-    var filterValue = $(this).attr('data-filter');
+  $('#filters').on('click', 'button', function(event) {
+    var target = $(event.currentTarget);
+
+    target.toggleClass('is-checked');
+
+    var isChecked = target.hasClass('is-checked');
+
+    var filter = target.attr('data-filter');
+
+    if (filter == "*") {
+      showAll();
+    }
+    else if (isChecked) {
+      addFilter(filter);
+    }
+    else {
+      removeFilter(filter);
+    }
 
     issueGrid.isotope({
-      filter: filterValue
+      filter: filters.join(',')
     });
   });
 });
+
+function addFilter(filter) {
+  if (filters.indexOf(filter) == -1) {
+    filters.push(filter);
+  }
+
+  var indexOfShowAllFilter = filters.indexOf(showAllFilter);
+
+  if (indexOfShowAllFilter != -1) {
+    showAllButton.removeClass('is-checked');
+
+    filters.splice(indexOfShowAllFilter, 1);
+  }
+}
+
+function removeFilter(filter) {
+  var index = filters.indexOf(filter);
+
+  if (index != -1) {
+    filters.splice(index, 1);
+  }
+
+  if (filters.length == 0) {
+    showAllButton.addClass('is-checked');
+
+    filters = ["*"];
+  }
+}
+
+function showAll() {
+  filters = ["*"];
+
+  $(".button:not(.show-all)").each(function() {
+    $(this).removeClass('is-checked');
+  });
+}

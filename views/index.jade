@@ -11,10 +11,11 @@ block content
   h1= title
   p Welcome to #{title}
 
-  div(id="filters")
-    h3 Filters
-    button(data-filter="*") Show All
-    button(data-filter=".escalation") Escalation
-    button(data-filter=".patch") Patch
-    button(data-filter=".task") Task
+  h3 Filters
+
+  div(class="button-group" id="filters")
+    button(class="button show-all is-checked" data-filter="*" id="show-all") Show All
+    button(class="button" data-filter=".escalation") Escalation
+    button(class="button" data-filter=".patch") Patch
+    button(class="button" data-filter=".task") Task
   div(class="grid", id="grid")
