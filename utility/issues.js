@@ -38,7 +38,7 @@ function fetchIssues() {
 
         trimmedIssue.key = issue.key;
         trimmedIssue.summary = issue.fields.summary;
-        trimmedIssue.issueType = issue.fields.issuetype.name;
+        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase();
         trimmedIssue.priority = issue.fields.priority.id;
         trimmedIssue.lesaLink = issue.fields.customfield_10731;
         trimmedIssue.status = issue.fields.status.name;

@@ -3,6 +3,10 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.issue-element {
+	float: left;
+	height: 100px;
+	padding: 10px;
+	position: relative;
+	width: 300px;
 }

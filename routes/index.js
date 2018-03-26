@@ -1,12 +1,19 @@
 var express = require('express');
-var issues = require('../utility/issues');
+var fs = require('fs');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  issues.fetchIssues();
-
-  res.render('index', { title: 'Express' });
+  fs.readFile("test.json", "utf-8", function(err, issues) {
+    if (err) {
+      console.log("Error loading local JSON file");
+    }
+    else {
+      res.render('index', {
+        issues: issues,
+        title: 'JIRA Dashboard'
+      });
+    }
+  })
 });
 
 module.exports = router;
