@@ -3,10 +3,10 @@ var JiraClient = require('jira-connector');
 
 var jira = new JiraClient( {
     host: 'issues.liferay.com',
-    /*basic_auth: {
+    basic_auth: {
         username: process.env.USERNAME,
         password: process.env.PASSWORD
-    }*/
+    }
 });
 
 function fetchIssues() {
@@ -21,7 +21,7 @@ function fetchIssues() {
       'key', 'fixVersions', 'customfield_20021', 'customfield_12120', 'priority',
       'customfield_10731', 'assignee', 'status', 'components', 'issuetype',
       'customfield_19120', 'customfield_20321', 'customfield_20322', 'summary',
-      'duedate', 'comment'
+      'duedate', 'comment', 'customfield_10194'
     ],
     expand: [
       'changelog'
@@ -38,8 +38,9 @@ function fetchIssues() {
 
         trimmedIssue.key = issue.key;
         trimmedIssue.summary = issue.fields.summary;
-        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase();
-        trimmedIssue.priority = issue.fields.priority.id;
+        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g,"-");
+        trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
+        trimmedIssue.businessValue = issue.fields.customfield_10194;
         trimmedIssue.lesaLink = issue.fields.customfield_10731;
         trimmedIssue.status = issue.fields.status.name;
         trimmedIssue.dueDate = issue.fields.duedate;
