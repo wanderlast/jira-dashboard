@@ -11,11 +11,16 @@ block content
   h1= title
   p Welcome to #{title}
 
-  h3 Filters
-
-  div(class="button-group" id="filters")
-    button(class="button show-all is-checked" data-filter="*" id="show-all") Show All
-    button(class="button" data-filter=".l1-escalation") Escalation
-    button(class="button" data-filter=".patch") Patch
-    button(class="button" data-filter=".task") Task
+  div(id="filters")
+    h3 Ticket Type
+    div(class="button-group", filter-type="type")
+      button(class="button show-all is-checked" data-filter="*" id="show-all") Show All
+      button(class="button" data-filter=".l1-escalation") Escalation
+      button(class="button" data-filter=".patch") Patch
+      button(class="button" data-filter=".task") Task
+    h3 Priority
+    div(class="button-group", filter-type="priority")
+      button(class="button" data-filter=".minor") Minor
+      button(class="button" data-filter=".major") Major
+      button(class="button" data-filter=".critical") Critical
   div(class="grid", id="grid")
