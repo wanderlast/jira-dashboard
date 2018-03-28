@@ -1,11 +1,7 @@
-var filters = ["*"];
-var showAllButton;
-var showAllFilter = "*";
+var groupFilters = {};
 
 $(document).ready(function() {
   var grid = $('.grid');
-
-  showAllButton = $('#show-all');
 
   issues.forEach(function(issue) {
     grid.append(
@@ -29,55 +25,69 @@ $(document).ready(function() {
     var isChecked = target.hasClass('is-checked');
 
     var filter = target.attr('data-filter');
+    var filterType = target.parent().attr('filter-type');
+
+    var filterGroup = groupFilters[filterType];
+
+    if (!filterGroup) {
+      filterGroup = groupFilters[filterType] = [];
+    }
 
     if (filter == "*") {
-      showAll();
+      groupFilters[filterType] = [];
+
+      showAll(filterType);
     }
     else if (isChecked) {
-      addFilter(filter);
+      addFilter(filter, filterType, filterGroup);
     }
     else {
-      removeFilter(filter);
+      removeFilter(filter, filterType, filterGroup);
     }
 
+    var filters = [];
+
+    for (var key in groupFilters) {
+      var groupFilter = groupFilters[key];
+
+      if (groupFilter.length) {
+        filters.push(groupFilters[key]);
+      }
+    }
+
+    var cartesianProductFilters = cartesianProduct(filters);
+
+    console.log("Cart = " + cartesianProductFilters);
     issueGrid.isotope({
-      filter: filters.join(',')
+      filter: cartesianProductFilters.toString()
     });
   });
 });
 
-function addFilter(filter) {
-  if (filters.indexOf(filter) == -1) {
-    filters.push(filter);
+function addFilter(filter, filterType, filterGroup) {
+  if (filterGroup.indexOf(filter) == -1) {
+    filterGroup.push(filter);
   }
 
-  var indexOfShowAllFilter = filters.indexOf(showAllFilter);
-
-  if (indexOfShowAllFilter != -1) {
-    showAllButton.removeClass('is-checked');
-
-    filters.splice(indexOfShowAllFilter, 1);
-  }
+  $('#' + filterType + '-show-all').removeClass('is-checked');
 }
 
-function removeFilter(filter) {
-  var index = filters.indexOf(filter);
+function removeFilter(filter, filterType, filterGroup) {
+  var index = filterGroup.indexOf(filter);
 
   if (index != -1) {
-    filters.splice(index, 1);
+    filterGroup.splice(index, 1);
   }
 
-  if (filters.length == 0) {
-    showAllButton.addClass('is-checked');
-
-    filters = ["*"];
+  if (filterGroup.length == 0) {
+    $('#' + filterType + '-show-all').addClass('is-checked');
   }
 }
 
-function showAll() {
-  filters = ["*"];
+function showAll(filterType) {
+  $('#' + filterType + '-show-all').addClass('is-checked');
 
-  $(".button:not(.show-all)").each(function() {
+  $('div[filter-type=' + filterType + ']').find('.button:not(.show-all)').each(function() {
     $(this).removeClass('is-checked');
   });
 }
