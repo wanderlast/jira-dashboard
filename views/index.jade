@@ -24,4 +24,12 @@ block content
       button(class="button" data-filter=".minor") Minor
       button(class="button" data-filter=".major") Major
       button(class="button" data-filter=".critical") Critical
+    h3 Business Value
+    div(class="button-group", filter-type="business-value")
+      button(class="button show-all is-checked" data-filter="*" id="business-value-show-all") Show All
+      button(class="button" data-filter=".1") 1
+      button(class="button" data-filter=".2") 2
+      button(class="button" data-filter=".3") 3
+      button(class="button" data-filter=".4") 4
+      button(class="button" data-filter=".5") 5
   div(class="grid", id="grid")

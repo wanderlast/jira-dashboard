@@ -5,7 +5,7 @@ $(document).ready(function() {
 
   issues.forEach(function(issue) {
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + '">' +
         '<h3>' + issue.key + '</h3>' +
         '<h4>' + issue.assignee + '</h4>' +
         '<h4>' + issue.summary + '</h4>' +
