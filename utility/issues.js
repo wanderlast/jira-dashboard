@@ -15,7 +15,7 @@ function fetchIssues() {
       '"Solution Proposed", "Ready for QA", closed, "Audit", ' +
       '"Automated Testing", "On Hold") AND type IN (Patch, Task, ' +
       '"L1 Escalation") AND assignee IN (membersOf(liferay-support-ts), ' +
-      'membersOf(liferay-support-ts-us), support-hu)',
+      'membersOf(liferay-support-ts-us), support-hu) ORDER BY key ASC',
     maxResults: 500,
     fields: [
       'key', 'fixVersions', 'customfield_20021', 'customfield_12120', 'priority',
