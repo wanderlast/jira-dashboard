@@ -55,11 +55,10 @@ $(document).ready(function() {
       }
     }
 
-    var cartesianProductFilters = cartesianProduct(filters);
+    var filterCombinations = getFilterCombinations(filters);
 
-    console.log("Cart = " + cartesianProductFilters);
     issueGrid.isotope({
-      filter: cartesianProductFilters.toString()
+      filter: filterCombinations.toString()
     });
   });
 });
@@ -70,6 +69,18 @@ function addFilter(filter, filterType, filterGroup) {
   }
 
   $('#' + filterType + '-show-all').removeClass('is-checked');
+}
+
+function getFilterCombinations(arr) {
+  return arr.reduce(function(a, b) {
+    return a.map(function(x) {
+      return b.map(function(y) {
+        return x + y;
+      })
+    }).reduce(function(a, b) {
+      return a.concat(b)
+    },[])
+  }, [[]])
 }
 
 function removeFilter(filter, filterType, filterGroup) {
@@ -90,16 +101,4 @@ function showAll(filterType) {
   $('div[filter-type=' + filterType + ']').find('.button:not(.show-all)').each(function() {
     $(this).removeClass('is-checked');
   });
-}
-
-function cartesianProduct(arr) {
-  return arr.reduce(function(a, b) {
-    return a.map(function(x) {
-      return b.map(function(y) {
-        return x + y;
-      })
-    }).reduce(function(a, b) {
-      return a.concat(b)
-    },[])
-  }, [[]])
 }
