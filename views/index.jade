@@ -32,4 +32,14 @@ block content
       button(class="button" data-filter=".3") 3
       button(class="button" data-filter=".4") 4
       button(class="button" data-filter=".5") 5
+    h3 Region
+      div(class="button-group", filter-type="region")
+        button(class="button show-all is-checked" data-filter="*" id="region-show-all") Show All
+        button(class="button" data-filter=".apac") APAC
+        button(class="button" data-filter=".brazil") Brazil
+        button(class="button" data-filter=".eu") EU
+        button(class="button" data-filter=".india") India
+        button(class="button" data-filter=".japan") Japan
+        button(class="button" data-filter=".spain") Spain
+        button(class="button" data-filter=".us") US
   div(class="grid", id="grid")
