@@ -9,7 +9,7 @@ $(document).ready(function() {
     grid.append(
       '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
         '<h3>' + issue.key + '</h3>' +
-        '<h4>' + issue.assignee + '</h4>' +
+        '<h4>' + issue.assigneeDisplayName + '</h4>' +
         '<h4>' + issue.summary + '</h4>' +
       '</div>'
     );
