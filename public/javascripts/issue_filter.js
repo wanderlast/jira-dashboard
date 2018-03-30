@@ -90,13 +90,13 @@ function addFilter(filter, filterType, filterGroup) {
 }
 
 function buildAssigneeButtons(regions, selectedAssignees) {
+  var assigneeButtons = new Set();
   var selectedAssigneesCopy = [];
 
   if (selectedAssignees) {
     selectedAssigneesCopy = selectedAssignees.slice();
   }
 
-  //assigneeButtonGroup.empty();
   $('div[filter-type=assignee]').find('.button:not(.show-all)').remove();
 
   if (!regions || regions.length === 0) {
@@ -113,7 +113,7 @@ function buildAssigneeButtons(regions, selectedAssignees) {
 
       var cssClass;
 
-      if (!selectedAssigneesCopy || (selectedAssigneesCopy.indexOf(assignee[0]) < 0)) {
+      if (!selectedAssignees || (selectedAssignees.indexOf(assignee[0]) < 0)) {
         cssClass = "button";
       }
       else {
@@ -122,7 +122,7 @@ function buildAssigneeButtons(regions, selectedAssignees) {
         cssClass = "button is-checked";
       }
 
-      assigneeButtonGroup.append(
+      assigneeButtons.add(
         '<button class="' + cssClass + '" data-filter="' + assignee[0] + '">' + assignee[1] + '</button>'
       );
     }
@@ -137,6 +137,8 @@ function buildAssigneeButtons(regions, selectedAssignees) {
   if (selectedAssignees && (selectedAssignees.length === 0)) {
     $('#assignee-show-all').addClass('is-checked');
   }
+
+  assigneeButtonGroup.append(Array.from(assigneeButtons));
 }
 
 function getFilterCombinations(arr) {
