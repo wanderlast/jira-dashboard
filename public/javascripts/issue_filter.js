@@ -8,7 +8,7 @@ $(document).ready(function() {
   issues.forEach(function(issue) {
     grid.append(
       '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
-        '<h3>' + issue.key + '</h3>' +
+        '<h3><a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a></h3>' +
         '<h4>' + issue.assigneeDisplayName + '</h4>' +
         '<h4>' + issue.summary + '</h4>' +
       '</div>'
