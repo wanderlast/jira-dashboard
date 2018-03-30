@@ -94,7 +94,8 @@ function buildAssigneeButtons(regions, selectedAssignees) {
     selectedAssigneesCopy = selectedAssignees.slice();
   }
 
-  assigneeButtonGroup.empty();
+  //assigneeButtonGroup.empty();
+  $('div[filter-type=assignee]').find('.button:not(.show-all)').remove();
 
   if (!regions || regions.length === 0) {
     regions = ["apac", "brazil", "eu", "india", "japan", "spain", "us"];
@@ -129,6 +130,10 @@ function buildAssigneeButtons(regions, selectedAssignees) {
     for (var k = 0; k < selectedAssigneesCopy.length; k++) {
       selectedAssignees.splice(selectedAssignees.indexOf(selectedAssigneesCopy[k]), 1);
     }
+  }
+
+  if (selectedAssignees && (selectedAssignees.length === 0)) {
+    $('#assignee-show-all').addClass('is-checked');
   }
 }
 
