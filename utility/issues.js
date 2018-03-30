@@ -38,14 +38,15 @@ function fetchIssues() {
 
         trimmedIssue.key = issue.key;
         trimmedIssue.summary = issue.fields.summary;
-        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g,"-");
+        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g, "-");
         trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
         trimmedIssue.businessValue = issue.fields.customfield_10194;
         trimmedIssue.region = issue.fields.customfield_11523[0].value.toLowerCase();
         trimmedIssue.lesaLink = issue.fields.customfield_10731;
         trimmedIssue.status = issue.fields.status.name;
         trimmedIssue.dueDate = issue.fields.duedate;
-        trimmedIssue.assignee = issue.fields.assignee.key;
+        trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
+        trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
 
         trimmedIssue.component = [];
 

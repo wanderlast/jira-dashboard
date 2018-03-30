@@ -1,3 +1,4 @@
+var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var groupFilters = {};
 
 $(document).ready(function() {
@@ -5,13 +6,33 @@ $(document).ready(function() {
 
   issues.forEach(function(issue) {
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
         '<h3>' + issue.key + '</h3>' +
         '<h4>' + issue.assignee + '</h4>' +
         '<h4>' + issue.summary + '</h4>' +
       '</div>'
     );
+
+    var assignee = issue.assignee + "|" + issue.assigneeDisplayName;
+
+    if (assignees[issue.region].indexOf(assignee) < 0) {
+      assignees[issue.region].push(assignee);
+    }
   });
+
+  var assigneeButtonGroup = $('#assignee-button-group');
+
+  for (var region in assignees) {
+    var regionAssignees = assignees[region];
+
+    for (var i = 0; i < regionAssignees.length; i++) {
+      var assignee = regionAssignees[i].split("|");
+
+      assigneeButtonGroup.append(
+        '<button class="button" data-filter=".' + assignee[0] + '">' + assignee[1] + '</button>'
+      );
+    }
+  }
 
   var issueGrid = grid.isotope({
     itemSelector: '.issue-element'
