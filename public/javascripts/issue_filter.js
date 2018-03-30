@@ -1,3 +1,4 @@
+var assigneeButtonGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var groupFilters = {};
 
@@ -13,26 +14,16 @@ $(document).ready(function() {
       '</div>'
     );
 
-    var assignee = issue.assignee + "|" + issue.assigneeDisplayName;
+    var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
 
     if (assignees[issue.region].indexOf(assignee) < 0) {
       assignees[issue.region].push(assignee);
     }
   });
 
-  var assigneeButtonGroup = $('#assignee-button-group');
+  assigneeButtonGroup = $('#assignee-button-group');
 
-  for (var region in assignees) {
-    var regionAssignees = assignees[region];
-
-    for (var i = 0; i < regionAssignees.length; i++) {
-      var assignee = regionAssignees[i].split("|");
-
-      assigneeButtonGroup.append(
-        '<button class="button" data-filter=".' + assignee[0] + '">' + assignee[1] + '</button>'
-      );
-    }
-  }
+  buildAssigneeButtons();
 
   var issueGrid = grid.isotope({
     itemSelector: '.issue-element'
@@ -55,7 +46,7 @@ $(document).ready(function() {
     }
 
     if (filter == "*") {
-      groupFilters[filterType] = [];
+      filterGroup = groupFilters[filterType] = [];
 
       showAll(filterType);
     }
@@ -64,6 +55,10 @@ $(document).ready(function() {
     }
     else {
       removeFilter(filter, filterType, filterGroup);
+    }
+
+    if (filterType === "region") {
+      buildAssigneeButtons(filterGroup, groupFilters["assignee"]);
     }
 
     var filters = [];
@@ -90,6 +85,51 @@ function addFilter(filter, filterType, filterGroup) {
   }
 
   $('#' + filterType + '-show-all').removeClass('is-checked');
+}
+
+function buildAssigneeButtons(regions, selectedAssignees) {
+  var selectedAssigneesCopy = [];
+
+  if (selectedAssignees) {
+    selectedAssigneesCopy = selectedAssignees.slice();
+  }
+
+  assigneeButtonGroup.empty();
+
+  if (!regions || regions.length === 0) {
+    regions = ["apac", "brazil", "eu", "india", "japan", "spain", "us"];
+  }
+
+  for (var i = 0; i < regions.length; i++) {
+    var region = regions[i].replace(/\./g, '');
+
+    var regionAssignees = assignees[region];
+
+    for (var j = 0; j < regionAssignees.length; j++) {
+      var assignee = regionAssignees[j].split("|");
+
+      var cssClass;
+
+      if (!selectedAssigneesCopy || (selectedAssigneesCopy.indexOf(assignee[0]) < 0)) {
+        cssClass = "button";
+      }
+      else {
+        selectedAssigneesCopy.splice(selectedAssigneesCopy.indexOf(assignee[0]), 1);
+
+        cssClass = "button is-checked";
+      }
+
+      assigneeButtonGroup.append(
+        '<button class="' + cssClass + '" data-filter="' + assignee[0] + '">' + assignee[1] + '</button>'
+      );
+    }
+  }
+
+  if (selectedAssigneesCopy && (selectedAssigneesCopy.length > 0)) {
+    for (var k = 0; k < selectedAssigneesCopy.length; k++) {
+      selectedAssignees.splice(selectedAssignees.indexOf(selectedAssigneesCopy[k]), 1);
+    }
+  }
 }
 
 function getFilterCombinations(arr) {
