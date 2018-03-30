@@ -8,6 +8,8 @@ $(document).ready(function() {
   issues.forEach(function(issue) {
     grid.append(
       '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
+        '<img style="float: right; height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
+        '<img style="float: right; height: 16px; width: 16px;" src="/images/' + issue.priority + '.svg" />' +
         '<h3><a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a></h3>' +
         '<h4>' + issue.assigneeDisplayName + '</h4>' +
         '<h4>' + issue.summary + '</h4>' +
