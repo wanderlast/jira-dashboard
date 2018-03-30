@@ -94,14 +94,14 @@ function fetchIssues() {
           trimmedIssue.isPastDueDate = false;
         }
 
-
         trimmedIssue.hoursSinceAssigneeComment = getHoursSinceLastComment(
           issue.fields.comment.comments, trimmedIssue.assignee);
-
 
         trimmedIssue.hoursSinceAssigned = getHoursSinceAssignedDate(
           issue.changelog.histories, trimmedIssue.assignee);
 
+        trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
+          issue.changelog.histories, trimmedIssue.status);
 
         trimmedIssue.hoursSinceStatusChange = getHoursSinceStatusChange(
           issue.changelog.histories, trimmedIssue.status);
@@ -142,6 +142,26 @@ function getHoursSinceLastComment(comments, assignee) {
       var timeElapsed = new Date().getTime() - commentDate;
 
       return Math.round(timeElapsed / 3600000);
+    }
+  }
+}
+
+function getHoursSinceLastPullRequest(histories, status) {
+  if (status !== "In Review") {
+    return;
+  }
+
+  for (var i = histories.length - 1; i >= 0; i--) {
+    var items = histories[i].items;
+
+    for (var j = 0; j < items.length; j++) {
+      if (items[j].field === "LPP Git Pull Request") {
+        var lastPullRequestDate = new Date(Date.parse(histories[i].created));
+
+        var timeElapsed = new Date().getTime() - lastPullRequestDate;
+
+        return Math.round(timeElapsed / 3600000);
+      }
     }
   }
 }
