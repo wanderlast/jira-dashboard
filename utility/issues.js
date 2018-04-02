@@ -96,10 +96,10 @@ function fetchIssues() {
         }
 
         trimmedIssue.hoursSinceAssigneeComment = getHoursSinceLastComment(
-          issue.fields.comment.comments, trimmedIssue.assignee);
+          issue.fields.comment.comments, issue.fields.assignee.key);
 
         trimmedIssue.hoursSinceAssigned = getHoursSinceAssignedDate(
-          issue.changelog.histories, trimmedIssue.assignee);
+          issue.changelog.histories, issue.fields.assignee.key);
 
         trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
           issue.changelog.histories, trimmedIssue.status);
