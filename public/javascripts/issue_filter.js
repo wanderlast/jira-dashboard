@@ -6,13 +6,18 @@ $(document).ready(function() {
   var grid = $('.grid');
 
   issues.forEach(function(issue) {
+    var issueUpdateBackground = getIssueUpdateBackground(issue);
+
     grid.append(
       '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
-        '<img style="float: right; height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
-        '<img style="float: right; height: 16px; width: 16px;" src="/images/' + issue.priority + '.svg" />' +
-        '<h3><a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a></h3>' +
-        '<h4>' + issue.assigneeDisplayName + '</h4>' +
-        '<h4>' + issue.summary + '</h4>' +
+        '<div class="issue-update ' + issueUpdateBackground + '"/>' +
+        '<div class="issue-details">' +
+          '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
+          '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
+          '<img style="height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
+          '<span style="float: right;">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
+          '<span>' + issue.summary + '</span>' +
+        '</div>' +
       '</div>'
     );
 
@@ -28,7 +33,11 @@ $(document).ready(function() {
   buildAssigneeButtons();
 
   var issueGrid = grid.isotope({
-    itemSelector: '.issue-element'
+    itemSelector: '.issue-element',
+    masonry: {
+      columnWidth: 50,
+      gutter: 5
+    }
   });
 
   $('#filters').on('click', 'button', function(event) {
@@ -151,6 +160,38 @@ function getFilterCombinations(arr) {
       return a.concat(b)
     },[])
   }, [[]])
+}
+
+function getIssueUpdateBackground(issue) {
+  var hours;
+
+  if (issue.status === "In Review") {
+    hours = issue.hoursSincePullRequest;
+  }
+  else {
+    var hoursSinceAssigneeComment = issue.hoursSinceAssigneeComment;
+    var hoursSinceStatusChange = issue.hoursSinceStatusChange;
+
+    if ((hoursSinceAssigneeComment === undefined) && (hoursSinceStatusChange === undefined)) {
+      hours = issue.hoursSinceAssigned;
+    }
+    else if ((hoursSinceAssigneeComment === undefined) || (hoursSinceStatusChange < hoursSinceAssigneeComment)) {
+      hours = hoursSinceStatusChange;
+    }
+    else {
+      hours = hoursSinceAssigneeComment;
+    }
+  }
+
+  if (hours < 24) {
+    return "background-green";
+  }
+  else if (hours < 72) {
+    return "background-yellow";
+  }
+  else {
+    return "background-red";
+  }
 }
 
 function removeFilter(filter, filterType, filterGroup) {
