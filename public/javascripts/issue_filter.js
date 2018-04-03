@@ -16,7 +16,7 @@ $(document).ready(function() {
           '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
           '<img style="height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
           '<span style="float: right;">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
-          '<span>' + issue.summary + '</span>' +
+          '<span class="issue-summary">' + issue.summary + '</span>' +
         '</div>' +
       '</div>'
     );

@@ -74,6 +74,10 @@ body {
 	width: 300px;
 }
 
+.issue-summary {
+	word-wrap: break-word;
+}
+
 .issue-update {
 	border-radius: 5px;
 	height: 100%;
