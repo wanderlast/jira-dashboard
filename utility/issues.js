@@ -117,6 +117,48 @@ function fetchIssues() {
   });
 }
 
+function getBusinessHoursElapsed(startDate) {
+  var businessHoursMilliseconds;
+  var now = new Date();
+
+  if ((startDate.getDate() === now.getDate()) &&
+      (startDate.getMonth() === now.getMonth()) &&
+      (startDate.getYear() ===now.getYear())) {
+
+    return Math.round((now.getTime() - startDate.getTime()) / 3600000);
+  }
+
+  var startDateMidnight = new Date(startDate);
+
+  startDateMidnight.setHours(24, 0, 0, 0);
+
+  businessHoursMilliseconds = startDateMidnight.getTime() - startDate.getTime();
+
+  var todayMidnight = new Date();
+
+  todayMidnight.setHours(0, 0, 0, 0);
+
+  businessHoursMilliseconds += new Date().getTime() - todayMidnight.getTime();
+
+  var date = new Date(startDate.getTime() + 86400000);
+
+  while (true) {
+    if ((date.getDate() === now.getDate()) &&
+        (date.getMonth() === now.getMonth()) &&
+        (date.getYear() === now.getYear())) {
+
+      break;
+    }
+    else if ((date.getDay() > 0) && (date.getDay() < 6)) {
+      businessHoursMilliseconds += 86400000;
+    }
+
+    date = new Date(date.getTime() + 86400000);
+  }
+
+  return Math.round(businessHoursMilliseconds / 3600000);
+}
+
 function getHoursSinceAssignedDate(histories, assignee) {
   for (var i = histories.length - 1; i >= 0; i--) {
     var items = histories[i].items;
@@ -127,9 +169,7 @@ function getHoursSinceAssignedDate(histories, assignee) {
 
         var assigneeDate = new Date(Date.parse(histories[i].created));
 
-        var timeElapsed = new Date().getTime() - assigneeDate;
-
-        return Math.round(timeElapsed / 3600000);
+        return getBusinessHoursElapsed(assigneeDate);
       }
     }
   }
@@ -140,9 +180,7 @@ function getHoursSinceLastComment(comments, assignee) {
     if (comments[i].author.key === assignee) {
       var commentDate = new Date(Date.parse(comments[i].created));
 
-      var timeElapsed = new Date().getTime() - commentDate;
-
-      return Math.round(timeElapsed / 3600000);
+      return getBusinessHoursElapsed(commentDate);
     }
   }
 }
@@ -159,9 +197,7 @@ function getHoursSinceLastPullRequest(histories, status) {
       if (items[j].field === "LPP Git Pull Request") {
         var lastPullRequestDate = new Date(Date.parse(histories[i].created));
 
-        var timeElapsed = new Date().getTime() - lastPullRequestDate;
-
-        return Math.round(timeElapsed / 3600000);
+        return getBusinessHoursElapsed(lastPullRequestDate);
       }
     }
   }
@@ -177,9 +213,7 @@ function getHoursSinceStatusChange(histories, status) {
 
         var statusChangeDate = new Date(Date.parse(histories[i].created));
 
-        var timeElapsed = new Date().getTime() - statusChangeDate;
-
-        return Math.round(timeElapsed / 3600000);
+        return getBusinessHoursElapsed(statusChangeDate);
       }
     }
   }
