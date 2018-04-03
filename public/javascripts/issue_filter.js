@@ -6,11 +6,11 @@ $(document).ready(function() {
   var grid = $('.grid');
 
   issues.forEach(function(issue) {
-    var issueUpdateBackground = getIssueUpdateBackground(issue);
+    var issueUpdateStatus = getIssueUpdateStatus(issue);
 
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + '">' +
-        '<div class="issue-update ' + issueUpdateBackground + '"/>' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+        '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
           '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
@@ -162,7 +162,7 @@ function getFilterCombinations(arr) {
   }, [[]])
 }
 
-function getIssueUpdateBackground(issue) {
+function getIssueUpdateStatus(issue) {
   var hours;
 
   if (issue.status === "In Review") {
@@ -184,13 +184,13 @@ function getIssueUpdateBackground(issue) {
   }
 
   if (hours < 24) {
-    return "background-green";
+    return "up-to-date";
   }
   else if (hours < 72) {
-    return "background-yellow";
+    return "update-soon";
   }
   else {
-    return "background-red";
+    return "needs-update";
   }
 }
 

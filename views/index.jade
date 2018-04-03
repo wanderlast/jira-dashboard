@@ -42,6 +42,12 @@ block content
         button(class="button" data-filter=".japan") Japan
         button(class="button" data-filter=".spain") Spain
         button(class="button" data-filter=".us") US
+    h3 Update
+      div(class="button-group", filter-type="update")
+        button(class="button show-all is-checked" data-filter="*" id="update-show-all") Show All
+        button(class="button" data-filter=".up-to-date") Up to Date
+        button(class="button" data-filter=".update-soon") Update Soon
+        button(class="button" data-filter=".needs-update") Needs Update
     h3 Assignee
       div(class="button-group", filter-type="assignee", id="assignee-button-group")
         button(class="button show-all is-checked" data-filter="*" id="assignee-show-all") Show All

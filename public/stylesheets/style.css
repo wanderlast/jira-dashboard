@@ -83,14 +83,14 @@ body {
 	width: 5px;
 }
 
-.background-green {
+.issue-up-to-date {
 	background-color: #00cd00;
 }
 
-.background-red {
+.issue-needs-update{
 	background-color: red;
 }
 
-.background-yellow {
+.issue-update-soon {
 	background-color: yellow;
 }
