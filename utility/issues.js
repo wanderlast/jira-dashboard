@@ -18,9 +18,9 @@ function fetchIssues() {
       'membersOf(liferay-support-ts-us), support-hu) ORDER BY key ASC',
     maxResults: 500,
     fields: [
-      'key', 'fixVersions', 'customfield_20021', 'customfield_12120', 'priority',
+      'key', 'fixVersions', 'customfield_12120', 'priority',
       'customfield_10731', 'assignee', 'status', 'components', 'issuetype',
-      'customfield_19120', 'customfield_20321', 'customfield_20322', 'summary',
+      'customfield_19120', 'customfield_20321', 'customfield_20527', 'summary',
       'duedate', 'comment', 'customfield_10194', 'customfield_11523'
     ],
     expand: [
@@ -72,19 +72,11 @@ function fetchIssues() {
           trimmedIssue.toDo = issue.fields.customfield_20321.value;
         }
 
-        if (issue.fields.customfield_20322) {
+        if (issue.fields.customfield_20527) {
           trimmedIssue.openDepenencies = [];
 
-          issue.fields.customfield_20322.forEach(function (openDependencies) {
+          issue.fields.customfield_20527.forEach(function (openDependencies) {
             trimmedIssue.openDepenencies.push(openDependencies.value);
-          });
-        }
-
-        if (issue.fields.customfield_20021) {
-          trimmedIssue.additionalInformation = [];
-
-          issue.fields.customfield_20021.forEach(function (additionalInformation) {
-            trimmedIssue.additionalInformation.push(additionalInformation.value);
           });
         }
 
