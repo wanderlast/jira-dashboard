@@ -171,15 +171,13 @@ function getIssueUpdateStatus(issue) {
   else {
     var hoursSinceAssigneeComment = issue.hoursSinceAssigneeComment;
     var hoursSinceStatusChange = issue.hoursSinceStatusChange;
+    var hoursSinceVerified = issue.hoursSinceVerified;
 
-    if ((hoursSinceAssigneeComment === undefined) && (hoursSinceStatusChange === undefined)) {
+    if ((hoursSinceAssigneeComment === undefined) && (hoursSinceStatusChange === undefined) && (hoursSinceVerified === undefined)) {
       hours = issue.hoursSinceAssigned;
     }
-    else if ((hoursSinceAssigneeComment === undefined) || (hoursSinceStatusChange < hoursSinceAssigneeComment)) {
-      hours = hoursSinceStatusChange;
-    }
     else {
-      hours = hoursSinceAssigneeComment;
+      hours = Math.min(hoursSinceAssigneeComment || Infinity, hoursSinceStatusChange || Infinity, hoursSinceVerified || Infinity);
     }
   }
 

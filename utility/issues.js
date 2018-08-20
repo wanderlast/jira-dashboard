@@ -104,6 +104,9 @@ function fetchIssues() {
         trimmedIssue.hoursSinceStatusChange = getHoursSinceStatusChange(
           issue.changelog.histories, trimmedIssue.status);
 
+        trimmedIssue.hoursSinceVerified = getHoursSinceVerified(
+          issue.changelog.histories);
+
         if (trimmedIssue.openDepenencies.contains("Code Review")) {
           trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
             issue.changelog.histories);
@@ -212,6 +215,21 @@ function getHoursSinceStatusChange(histories, status) {
         var statusChangeDate = new Date(Date.parse(histories[i].created));
 
         return getBusinessHoursElapsed(statusChangeDate);
+      }
+    }
+  }
+}
+
+function getHoursSinceVerified(histories) {
+  for (var i = histories.length - 1; i >= 0; i--) {
+    var items = histories[i].items;
+
+    for (var j = 0; j < items.length; j++) {
+      if ((items[j].field === "Verified")) {
+
+        var verifiedDate = new Date(Date.parse(histories[i].created));
+
+        return getBusinessHoursElapsed(verifiedDate);
       }
     }
   }
