@@ -23,7 +23,8 @@ function fetchIssues() {
       'key', 'fixVersions', 'customfield_12120', 'priority',
       'customfield_10731', 'assignee', 'status', 'components', 'issuetype',
       'customfield_19120', 'customfield_20321', 'customfield_20527', 'summary',
-      'duedate', 'comment', 'customfield_10194', 'customfield_11523'
+      'duedate', 'comment', 'customfield_10194', 'customfield_11523',
+      'customfield_20720', 'customfield_10190'
     ],
     expand: [
       'changelog'
@@ -49,6 +50,7 @@ function fetchIssues() {
         trimmedIssue.dueDate = issue.fields.duedate;
         trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
         trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
+        trimmedIssue.verified = issue.fields.customfield_20720.value;
 
         trimmedIssue.component = [];
 
@@ -61,6 +63,10 @@ function fetchIssues() {
         issue.fields.fixVersions.forEach(function(fixVersion) {
           trimmedIssue.fixVersions.push(fixVersion.name);
         });
+
+        if (issue.fields.customfield_10190) {
+          trimmedIssue.flagged = true;
+        }
 
         if (issue.fields.customfield_12120) {
           trimmedIssue.issueFixedIn = issue.fields.customfield_12120.value;
