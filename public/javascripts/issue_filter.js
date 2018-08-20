@@ -16,7 +16,8 @@ $(document).ready(function() {
           '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
           '<img style="height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
           '<span style="float: right;">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
-          '<span class="issue-summary">' + issue.summary + '</span>' +
+          '<span class="issue-summary">' + issue.summary + '</span> <br> <br>' +
+          '<span class="issue-summary">' + issue.openDepenencies.join(", ") + '</span>' +
         '</div>' +
       '</div>'
     );
@@ -35,7 +36,7 @@ $(document).ready(function() {
   var issueGrid = grid.isotope({
     itemSelector: '.issue-element',
     masonry: {
-      columnWidth: 50,
+      columnWidth: 75,
       gutter: 5
     }
   });

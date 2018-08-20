@@ -67,11 +67,11 @@ body {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	float: left;
-	height: 100px;
+	height: 125px;
 	margin-bottom: 5px;
 	padding: 10px;
 	position: relative;
-	width: 300px;
+	width: 375px;
 }
 
 .issue-summary {
