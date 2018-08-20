@@ -101,11 +101,13 @@ function fetchIssues() {
         trimmedIssue.hoursSinceAssigned = getHoursSinceAssignedDate(
           issue.changelog.histories, issue.fields.assignee.key);
 
-        trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
-          issue.changelog.histories, trimmedIssue.status);
-
         trimmedIssue.hoursSinceStatusChange = getHoursSinceStatusChange(
           issue.changelog.histories, trimmedIssue.status);
+
+        if (trimmedIssue.openDepenencies.contains("Code Review")) {
+          trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
+            issue.changelog.histories);
+        }
 
         issues.push(trimmedIssue);
       });
@@ -185,11 +187,7 @@ function getHoursSinceLastComment(comments, assignee) {
   }
 }
 
-function getHoursSinceLastPullRequest(histories, status) {
-  if (status !== "In Review") {
-    return;
-  }
-
+function getHoursSinceLastPullRequest(histories) {
   for (var i = histories.length - 1; i >= 0; i--) {
     var items = histories[i].items;
 

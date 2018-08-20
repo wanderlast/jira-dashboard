@@ -165,7 +165,7 @@ function getFilterCombinations(arr) {
 function getIssueUpdateStatus(issue) {
   var hours;
 
-  if (issue.status === "In Review") {
+  if (issue.openDepenencies.contains("Code Review") && (issue.hoursSincePullRequest !== undefined)) {
     hours = issue.hoursSincePullRequest;
   }
   else {
