@@ -50,7 +50,6 @@ function fetchIssues() {
         trimmedIssue.dueDate = issue.fields.duedate;
         trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
         trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
-        trimmedIssue.verified = issue.fields.customfield_20720.value;
 
         trimmedIssue.component = [];
 
@@ -58,11 +57,17 @@ function fetchIssues() {
           trimmedIssue.component.push(component.name);
         });
 
-        trimmedIssue.fixVersions = [];
+        if (issue.fields.fixVersions) {
+          trimmedIssue.fixVersions = [];
 
-        issue.fields.fixVersions.forEach(function(fixVersion) {
-          trimmedIssue.fixVersions.push(fixVersion.name);
-        });
+          issue.fields.fixVersions.forEach(function(fixVersion) {
+            trimmedIssue.fixVersions.push(fixVersion.name);
+          });
+        }
+
+        if (issue.fields.customfield_20720) {
+          trimmedIssue.verified = issue.fields.customfield_20720.value;
+        }
 
         if (issue.fields.customfield_10190) {
           trimmedIssue.flagged = true;
@@ -107,7 +112,7 @@ function fetchIssues() {
         trimmedIssue.hoursSinceVerified = getHoursSinceVerified(
           issue.changelog.histories);
 
-        if (trimmedIssue.openDependencies.contains("Code Review")) {
+        if (trimmedIssue.openDependencies && (trimmedIssue.openDependencies.indexOf("Code Review") > -1)) {
           trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
             issue.changelog.histories);
         }
