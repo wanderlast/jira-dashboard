@@ -81,10 +81,10 @@ function fetchIssues() {
         }
 
         if (issue.fields.customfield_20527) {
-          trimmedIssue.openDepenencies = [];
+          trimmedIssue.openDependencies = [];
 
           issue.fields.customfield_20527.forEach(function (openDependencies) {
-            trimmedIssue.openDepenencies.push(openDependencies.value);
+            trimmedIssue.openDependencies.push(openDependencies.value);
           });
         }
 
@@ -107,7 +107,7 @@ function fetchIssues() {
         trimmedIssue.hoursSinceVerified = getHoursSinceVerified(
           issue.changelog.histories);
 
-        if (trimmedIssue.openDepenencies.contains("Code Review")) {
+        if (trimmedIssue.openDependencies.contains("Code Review")) {
           trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
             issue.changelog.histories);
         }
