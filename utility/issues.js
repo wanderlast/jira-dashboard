@@ -11,11 +11,13 @@ var jira = new JiraClient( {
 
 function fetchIssues() {
   jira.search.search({
-    jql: 'project = lpp AND status NOT IN (resolved, "TS Complete", ' +
-      '"Solution Proposed", "Ready for QA", closed, "Audit", ' +
-      '"Automated Testing", "On Hold") AND type IN (Patch, Task, ' +
-      '"L1 Escalation") AND assignee IN (membersOf(liferay-support-ts), ' +
-      'membersOf(liferay-support-ts-us), support-hu) ORDER BY key ASC',
+    jql: 'project = LPP AND status NOT IN ("Resolved", "Completed", ' +
+      '"Solution Proposed", "Closed", "Audit", "On Hold") AND type IN "' +
+      '(Patch, "Task, "L1 Escalation") AND assignee IN "' +
+      '(membersOf(liferay-support-ts), membersOf(liferay-support-ts-us), "' +
+      'support-hu) AND ("TS Solution Delivered" = EMPTY OR "' +
+      '"TS Solution Delivered" = No OR type = "L1 Escalation" OR type = Task) "' +
+      'ORDER BY key ASC',
     maxResults: 500,
     fields: [
       'key', 'fixVersions', 'customfield_12120', 'priority',
