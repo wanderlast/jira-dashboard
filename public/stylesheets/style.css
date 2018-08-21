@@ -63,6 +63,11 @@ body {
 	padding-left: 5px;
 }
 
+	.issue-details a {
+		color: #0000EE;
+		text-decoration: none;
+	}
+
 .issue-element {
 	border: 1px solid #ccc;
 	border-radius: 5px;
