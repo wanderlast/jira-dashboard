@@ -42,6 +42,8 @@ $(document).ready(function() {
     }
   });
 
+  filterByUrlParameters(issueGrid);
+
   $('#filters').on('click', 'button', function(event) {
     var target = $(event.currentTarget);
 
@@ -74,21 +76,7 @@ $(document).ready(function() {
       buildAssigneeButtons(filterGroup, groupFilters["assignee"]);
     }
 
-    var filters = [];
-
-    for (var key in groupFilters) {
-      var groupFilter = groupFilters[key];
-
-      if (groupFilter.length) {
-        filters.push(groupFilters[key]);
-      }
-    }
-
-    var filterCombinations = getFilterCombinations(filters);
-
-    issueGrid.isotope({
-      filter: filterCombinations.toString()
-    });
+    updateIssueGrid(issueGrid);
   });
 });
 
@@ -97,7 +85,7 @@ function addFilter(filter, filterType, filterGroup) {
     filterGroup.push(filter);
   }
 
-  $('#' + filterType + '-show-all').removeClass('is-checked');
+  uncheckFilterTypeShowAll(filterType);
 }
 
 function buildAssigneeButtons(regions, selectedAssignees) {
@@ -151,10 +139,36 @@ function buildAssigneeButtons(regions, selectedAssignees) {
   }
 
   if (selectedAssignees && (selectedAssignees.length === 0)) {
-    $('#assignee-show-all').addClass('is-checked');
+    checkFilterTypeShowAll("assignee")
   }
 
   assigneeButtonGroup.append(Array.from(assigneeButtons));
+}
+
+function checkFilterTypeShowAll(filterType) {
+  $('#' + filterType + '-show-all').addClass('is-checked');
+}
+
+function filterByUrlParameters(issueGrid) {
+  var urlFilterRegex = /[?&]+([^=&]+)=([^&]*)/gi;
+
+  var match;
+
+  while (match = urlFilterRegex.exec(location.href)) {
+    var filterType = match[1];
+
+    uncheckFilterTypeShowAll(filterType);
+
+    groupFilters[filterType] = match[2].split('+').map(function(filter) {
+        filter = '.' + filter;
+  
+        $("button[data-filter='" + filter + "'").toggleClass('is-checked');
+  
+        return filter;
+      });
+  }
+
+  updateIssueGrid(issueGrid);
 }
 
 function getFilterCombinations(arr) {
@@ -207,14 +221,36 @@ function removeFilter(filter, filterType, filterGroup) {
   }
 
   if (filterGroup.length == 0) {
-    $('#' + filterType + '-show-all').addClass('is-checked');
+    checkFilterTypeShowAll(filterType)
   }
 }
 
 function showAll(filterType) {
-  $('#' + filterType + '-show-all').addClass('is-checked');
+  checkFilterTypeShowAll(filterType)
 
   $('div[filter-type=' + filterType + ']').find('.button:not(.show-all)').each(function() {
     $(this).removeClass('is-checked');
+  });
+}
+
+function uncheckFilterTypeShowAll(filterType) {
+  $('#' + filterType + '-show-all').removeClass('is-checked');
+}
+
+function updateIssueGrid(issueGrid) {
+  var filters = [];
+
+  for (var key in groupFilters) {
+    var groupFilter = groupFilters[key];
+
+    if (groupFilter.length) {
+      filters.push(groupFilters[key]);
+    }
+  }
+
+  var filterCombinations = getFilterCombinations(filters);
+
+  issueGrid.isotope({
+    filter: filterCombinations.toString()
   });
 }
