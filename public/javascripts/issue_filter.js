@@ -16,8 +16,8 @@ $(document).ready(function() {
           '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
           '<img style="height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
           '<span style="float: right;">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
-          '<span class="issue-summary">' + issue.summary + '</span> <br> <br>' +
-          '<span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' +
+          '<span class="issue-summary">' + issue.summary + '</span>' +
+          (issue.openDependencies ? '<br> <br> <span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' : '') +
         '</div>' +
       '</div>'
     );
@@ -166,7 +166,7 @@ function getFilterCombinations(arr) {
 function getIssueUpdateStatus(issue) {
   var hours;
 
-  if (issue.openDependencies.contains("Code Review") && (issue.hoursSincePullRequest !== undefined)) {
+  if (issue.openDependencies && (issue.openDependencies.indexOf("Code Review") > -1) && (issue.hoursSincePullRequest !== undefined)) {
     hours = issue.hoursSincePullRequest;
   }
   else {
