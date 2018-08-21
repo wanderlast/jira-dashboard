@@ -170,6 +170,8 @@ function filterByUrlParameters(issueGrid) {
       });
   }
 
+  buildAssigneeButtons(groupFilters["region"], groupFilters["assignee"]);
+
   updateIssueGrid(issueGrid);
 }
 
