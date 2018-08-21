@@ -9,12 +9,13 @@ $(document).ready(function() {
     var issueUpdateStatus = getIssueUpdateStatus(issue);
 
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
           '<img class="issue-icon-priority" src="/images/' + issue.priority + '.svg" />' +
           '<img class="issue-icon" src="/images/' + issue.issueType + '.svg" />' +
+          (issue.flagged ? '<img class="issue-icon-flag" src="/images/flag.svg" />' : '') +
           '<span class="issue-assignee">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
           '<span class="issue-summary">' + issue.summary + '</span>' +
           (issue.openDependencies ? '<br> <br> <span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' : '') +

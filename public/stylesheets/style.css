@@ -88,6 +88,13 @@ body {
 	width: 16px;
 }
 
+.issue-icon-flag {
+	color: red;
+	height: 16px;
+	padding-left: 15px;
+	width: 16px;
+}
+
 .issue-icon-priority {
 	height: 16px;
 	padding-left: 10px;
