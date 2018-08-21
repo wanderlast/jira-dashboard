@@ -101,6 +101,7 @@ function addFilter(filter, filterType, filterGroup) {
 
 function buildAssigneeButtons(regions, selectedAssignees) {
   var assigneeButtons = new Set();
+  var regionAssignees = [];
   var selectedAssigneesCopy = [];
 
   if (selectedAssignees) {
@@ -116,26 +117,30 @@ function buildAssigneeButtons(regions, selectedAssignees) {
   for (var i = 0; i < regions.length; i++) {
     var region = regions[i].replace(/\./g, '');
 
-    var regionAssignees = assignees[region];
+    regionAssignees = regionAssignees.concat(assignees[region]);
+  }
 
-    for (var j = 0; j < regionAssignees.length; j++) {
-      var assignee = regionAssignees[j].split("|");
+  regionAssignees.sort(function(a, b) {
+    return a.localeCompare(b);
+  });
 
-      var cssClass;
+  for (var j = 0; j < regionAssignees.length; j++) {
+    var assignee = regionAssignees[j].split("|");
 
-      if (!selectedAssignees || (selectedAssignees.indexOf(assignee[0]) < 0)) {
-        cssClass = "button";
-      }
-      else {
-        selectedAssigneesCopy.splice(selectedAssigneesCopy.indexOf(assignee[0]), 1);
+    var cssClass;
 
-        cssClass = "button is-checked";
-      }
-
-      assigneeButtons.add(
-        '<button class="' + cssClass + '" data-filter="' + assignee[0] + '">' + assignee[1] + '</button>'
-      );
+    if (!selectedAssignees || (selectedAssignees.indexOf(assignee[0]) < 0)) {
+      cssClass = "button";
     }
+    else {
+      selectedAssigneesCopy.splice(selectedAssigneesCopy.indexOf(assignee[0]), 1);
+
+      cssClass = "button is-checked";
+    }
+
+    assigneeButtons.add(
+      '<button class="' + cssClass + '" data-filter="' + assignee[0] + '">' + assignee[1] + '</button>'
+    );
   }
 
   if (selectedAssigneesCopy && (selectedAssigneesCopy.length > 0)) {
