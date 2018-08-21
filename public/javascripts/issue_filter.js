@@ -13,9 +13,9 @@ $(document).ready(function() {
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
-          '<img style="height: 16px; width: 16px; padding-left: 10px;" src="/images/' + issue.priority + '.svg" />' +
-          '<img style="height: 16px; width: 16px;" src="/images/' + issue.issueType + '.svg" />' +
-          '<span style="float: right;">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
+          '<img class="issue-icon-priority" src="/images/' + issue.priority + '.svg" />' +
+          '<img class="issue-icon" src="/images/' + issue.issueType + '.svg" />' +
+          '<span class="issue-assignee">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
           '<span class="issue-summary">' + issue.summary + '</span>' +
           (issue.openDependencies ? '<br> <br> <span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' : '') +
         '</div>' +

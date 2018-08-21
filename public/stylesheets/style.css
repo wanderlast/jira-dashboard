@@ -59,6 +59,10 @@ body {
 	border-radius: 0 0.5em 0.5em 0;
 }
 
+.issue-assignee {
+	float: right;
+}
+
 .issue-details {
 	padding-left: 5px;
 }
@@ -77,6 +81,17 @@ body {
 	padding: 10px;
 	position: relative;
 	width: 375px;
+}
+
+.issue-icon {
+	height: 16px;
+	width: 16px;
+}
+
+.issue-icon-priority {
+	height: 16px;
+	padding-left: 10px;
+	width: 16px;
 }
 
 .issue-summary {
