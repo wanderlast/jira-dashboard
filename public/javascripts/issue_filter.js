@@ -77,6 +77,8 @@ $(document).ready(function() {
     }
 
     updateIssueGrid(issueGrid);
+
+    updateWindowHistoryState();
   });
 });
 
@@ -253,4 +255,18 @@ function updateIssueGrid(issueGrid) {
   issueGrid.isotope({
     filter: filterCombinations.toString()
   });
+}
+
+function updateWindowHistoryState() {
+  var urlParameters = [];
+
+  for (var key in groupFilters) {
+    var filters = groupFilters[key];
+
+    if (filters.length) {
+      urlParameters.push(key + "=" + filters.join('+').replace(/\./g, ''));
+    }
+  }
+
+  window.history.replaceState(null, '', '?' + urlParameters.join('&'))
 }
