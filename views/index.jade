@@ -45,6 +45,10 @@ block content
         button(class="button" data-filter=".up-to-date") Up to Date
         button(class="button" data-filter=".update-soon") Update Soon
         button(class="button" data-filter=".needs-update") Needs Update
+    h3 Status
+      div(class="button-group", filter-type="status")
+        button(class="button show-all is-checked" data-filter="*" id="status-show-all") Show All
+        button(class="button" data-filter=".blocked") Blocked
     h3 Assignee
       div(class="button-group", filter-type="assignee", id="assignee-button-group")
         button(class="button show-all is-checked" data-filter="*" id="assignee-show-all") Show All
