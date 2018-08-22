@@ -23,7 +23,7 @@ function fetchIssues() {
       'key', 'fixVersions', 'customfield_12120', 'priority',
       'customfield_10731', 'assignee', 'status', 'components', 'issuetype',
       'customfield_19120', 'customfield_20321', 'customfield_20527', 'summary',
-      'duedate', 'comment', 'customfield_10194', 'customfield_11523',
+      'duedate', 'comment', 'customfield_11523',
       'customfield_20720', 'customfield_10190'
     ],
     expand: [
@@ -43,7 +43,6 @@ function fetchIssues() {
         trimmedIssue.summary = issue.fields.summary;
         trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g, "-");
         trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
-        trimmedIssue.businessValue = issue.fields.customfield_10194;
         trimmedIssue.region = issue.fields.customfield_11523[0].value.toLowerCase();
         trimmedIssue.lesaLink = issue.fields.customfield_10731;
         trimmedIssue.status = issue.fields.status.name;

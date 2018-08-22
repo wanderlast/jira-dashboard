@@ -9,7 +9,7 @@ $(document).ready(function() {
     var issueUpdateStatus = getIssueUpdateStatus(issue);
 
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + issue.businessValue + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
