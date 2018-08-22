@@ -63,7 +63,7 @@ $(document).ready(function() {
     }
 
     if (filterType === "region") {
-      buildAssigneeButtons(filterGroup, groupFilters["assignee"]);
+      buildAssigneeCheckboxes(filterGroup, groupFilters["assignee"]);
     }
 
     updateIssueGrid(issueGrid);
@@ -78,13 +78,13 @@ function addFilter(filter, filterGroup) {
   }
 }
 
-function buildAssigneeButtons(regions, selectedAssignees) {
+function buildAssigneeCheckboxes(regions, selectedAssignees) {
   var assigneeButtons = new Set();
+  var assigneesToUncheck = [];
   var regionAssignees = [];
-  var selectedAssigneesCopy = [];
  
   if (selectedAssignees) {
-    selectedAssigneesCopy = selectedAssignees.slice();
+    assigneesToUncheck = selectedAssignees.slice();
   }
 
   $('div[filter-type=assignee]').empty();
@@ -109,7 +109,7 @@ function buildAssigneeButtons(regions, selectedAssignees) {
     var checked = false;
 
     if (selectedAssignees && (selectedAssignees.indexOf(assignee[0]) > -1)) {
-      selectedAssigneesCopy.splice(selectedAssigneesCopy.indexOf(assignee[0]), 1);
+      assigneesToUncheck.splice(assigneesToUncheck.indexOf(assignee[0]), 1);
 
       checked = true;
     }
@@ -122,9 +122,9 @@ function buildAssigneeButtons(regions, selectedAssignees) {
     );
   }
 
-  if (selectedAssigneesCopy && (selectedAssigneesCopy.length > 0)) {
-    for (var k = 0; k < selectedAssigneesCopy.length; k++) {
-      selectedAssignees.splice(selectedAssignees.indexOf(selectedAssigneesCopy[k]), 1);
+  if (assigneesToUncheck && (assigneesToUncheck.length > 0)) {
+    for (var k = 0; k < assigneesToUncheck.length; k++) {
+      selectedAssignees.splice(selectedAssignees.indexOf(assigneesToUncheck[k]), 1);
     }
   }
 
@@ -148,7 +148,7 @@ function filterByUrlParameters(issueGrid) {
       });
   }
 
-  buildAssigneeButtons(groupFilters["region"], groupFilters["assignee"]);
+  buildAssigneeCheckboxes(groupFilters["region"], groupFilters["assignee"]);
 
   updateIssueGrid(issueGrid);
 }
