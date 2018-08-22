@@ -59,6 +59,38 @@ body {
 	border-radius: 0 0.5em 0.5em 0;
 }
 
+label {
+	cursor: pointer;
+	display: block;
+}
+
+input, input:active, input:focus {
+    outline: none;
+}
+
+input::-moz-focus-inner { 
+    border: 0; 
+}
+
+input[type="checkbox"] {
+	cursor: pointer;
+}
+
+	input[type="checkbox"] + label {
+		cursor: pointer;
+		display: inline-block;
+	}
+
+.filters {
+	float: left;
+	width: 20%;
+}
+
+.grid {
+	margin-left: 20%;
+	width: 80%;
+}
+
 .issue-assignee {
 	float: right;
 }
@@ -124,4 +156,10 @@ body {
 
 .issue-update-soon {
 	background-color: yellow;
+}
+
+.selected-filters {
+	margin-left: 20%;
+	height: 100px;
+	width: 80%;
 }

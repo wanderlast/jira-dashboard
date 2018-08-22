@@ -8,49 +8,89 @@ block content
   script(src="/javascripts/isotope.pkgd.min.js")
   script(src="/javascripts/issue_filter.js")
 
-  div(id="filters")
+  div(class="filters", id="filters")
     h3 Ticket Type
     div(class="button-group", filter-type="type")
-      button(class="button show-all is-checked" data-filter="*" id="type-show-all") Show All
-      button(class="button" data-filter=".l1-escalation") Escalation
-      button(class="button" data-filter=".patch") Patch
-      button(class="button" data-filter=".task") Task
+      label
+        input(data-filter=".l1-escalation" type="checkbox")
+        | Escalation
+      label
+        input(data-filter=".patch" type="checkbox")
+        | Patch
+      label
+        input(data-filter=".task" type="checkbox")
+        | Task
     h3 Priority
     div(class="button-group", filter-type="priority")
-      button(class="button show-all is-checked" data-filter="*" id="priority-show-all") Show All
-      button(class="button" data-filter=".minor") Minor
-      button(class="button" data-filter=".major") Major
-      button(class="button" data-filter=".critical") Critical
+      label
+        input(data-filter=".minor" type="checkbox")
+        | Minor
+      label
+        input(data-filter=".major" type="checkbox")
+        | Major
+      label
+        input(data-filter=".critical" type="checkbox")
+        | Critical
     h3 Business Value
     div(class="button-group", filter-type="business-value")
-      button(class="button show-all is-checked" data-filter="*" id="business-value-show-all") Show All
-      button(class="button" data-filter=".1") 1
-      button(class="button" data-filter=".2") 2
-      button(class="button" data-filter=".3") 3
-      button(class="button" data-filter=".4") 4
-      button(class="button" data-filter=".5") 5
+      label
+        input(data-filter=".1" type="checkbox")
+        | 1
+      label
+        input(data-filter=".2" type="checkbox")
+        | 2
+      label
+        input(data-filter=".3" type="checkbox")
+        | 3
+      label
+        input(data-filter=".4" type="checkbox")
+        | 4
+      label
+        input(data-filter=".5" type="checkbox")
+        | 5
     h3 Region
-      div(class="button-group", filter-type="region")
-        button(class="button show-all is-checked" data-filter="*" id="region-show-all") Show All
-        button(class="button" data-filter=".apac") APAC
-        button(class="button" data-filter=".brazil") Brazil
-        button(class="button" data-filter=".eu") EU
-        button(class="button" data-filter=".india") India
-        button(class="button" data-filter=".japan") Japan
-        button(class="button" data-filter=".spain") Spain
-        button(class="button" data-filter=".us") US
+    div(class="button-group", filter-type="region")
+      label
+        input(data-filter=".apac" type="checkbox")
+        | APAC
+      label
+        input(data-filter=".brazil" type="checkbox")
+        | Brazil
+      label
+        input(data-filter=".eu" type="checkbox")
+        | EU
+      label
+        input(data-filter=".india" type="checkbox")
+        | India
+      label
+        input(data-filter=".japan" type="checkbox")
+        | Japan
+      label
+        input(data-filter=".spain" type="checkbox")
+        | Spain
+      label
+        input(data-filter=".us" type="checkbox")
+        | US
     h3 Update
-      div(class="button-group", filter-type="update")
-        button(class="button show-all is-checked" data-filter="*" id="update-show-all") Show All
-        button(class="button" data-filter=".up-to-date") Up to Date
-        button(class="button" data-filter=".update-soon") Update Soon
-        button(class="button" data-filter=".needs-update") Needs Update
+    div(class="button-group", filter-type="update")
+      label
+        input(data-filter=".up-to-date" type="checkbox")
+        | Up to Date
+      label
+        input(data-filter=".update-soon" type="checkbox")
+        | Update Soon
+      label
+        input(data-filter=".needs-update" type="checkbox")
+        | Needs Update
     h3 Status
-      div(class="button-group", filter-type="status")
-        button(class="button show-all is-checked" data-filter="*" id="status-show-all") Show All
-        button(class="button" data-filter=".blocked") Blocked
-        button(class="button" data-filter=".flagged") Flagged
+    div(class="button-group", filter-type="status")
+      label
+        input(data-filter=".blocked" type="checkbox")
+        | Blocked
+      label
+        input(data-filter=".flagged" type="checkbox")
+        | Flagged
     h3 Assignee
-      div(class="button-group", filter-type="assignee", id="assignee-button-group")
-        button(class="button show-all is-checked" data-filter="*" id="assignee-show-all") Show All
+    div(class="button-group", filter-type="assignee", id="assignee-button-group")
+  div(class="selected-filters", id="selected-filters")
   div(class="grid", id="grid")

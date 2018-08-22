@@ -32,8 +32,6 @@ $(document).ready(function() {
 
   assigneeButtonGroup = $('#assignee-button-group');
 
-  buildAssigneeButtons();
-
   var issueGrid = grid.isotope({
     itemSelector: '.issue-element',
     masonry: {
@@ -44,15 +42,12 @@ $(document).ready(function() {
 
   filterByUrlParameters(issueGrid);
 
-  $('#filters').on('click', 'button', function(event) {
+  $('#filters').on('change', 'input[type=checkbox]', function(event) {
     var target = $(event.currentTarget);
 
-    target.toggleClass('is-checked');
-
-    var isChecked = target.hasClass('is-checked');
-
+    var isChecked = target.prop('checked');
     var filter = target.attr('data-filter');
-    var filterType = target.parent().attr('filter-type');
+    var filterType = target.parent().parent().attr('filter-type');
 
     var filterGroup = groupFilters[filterType];
 
@@ -60,16 +55,11 @@ $(document).ready(function() {
       filterGroup = groupFilters[filterType] = [];
     }
 
-    if (filter == "*") {
-      filterGroup = groupFilters[filterType] = [];
-
-      showAll(filterType);
-    }
-    else if (isChecked) {
-      addFilter(filter, filterType, filterGroup);
+    if (isChecked) {
+      addFilter(filter, filterGroup);
     }
     else {
-      removeFilter(filter, filterType, filterGroup);
+      removeFilter(filter, filterGroup);
     }
 
     if (filterType === "region") {
@@ -82,24 +72,22 @@ $(document).ready(function() {
   });
 });
 
-function addFilter(filter, filterType, filterGroup) {
+function addFilter(filter, filterGroup) {
   if (filterGroup.indexOf(filter) == -1) {
     filterGroup.push(filter);
   }
-
-  uncheckFilterTypeShowAll(filterType);
 }
 
 function buildAssigneeButtons(regions, selectedAssignees) {
   var assigneeButtons = new Set();
   var regionAssignees = [];
   var selectedAssigneesCopy = [];
-
+ 
   if (selectedAssignees) {
     selectedAssigneesCopy = selectedAssignees.slice();
   }
 
-  $('div[filter-type=assignee]').find('.button:not(.show-all)').remove();
+  $('div[filter-type=assignee]').empty();
 
   if (!regions || regions.length === 0) {
     regions = ["apac", "brazil", "eu", "india", "japan", "spain", "us"];
@@ -118,19 +106,19 @@ function buildAssigneeButtons(regions, selectedAssignees) {
   for (var j = 0; j < regionAssignees.length; j++) {
     var assignee = regionAssignees[j].split("|");
 
-    var cssClass;
+    var checked = false;
 
-    if (!selectedAssignees || (selectedAssignees.indexOf(assignee[0]) < 0)) {
-      cssClass = "button";
-    }
-    else {
+    if (selectedAssignees && (selectedAssignees.indexOf(assignee[0]) > -1)) {
       selectedAssigneesCopy.splice(selectedAssigneesCopy.indexOf(assignee[0]), 1);
 
-      cssClass = "button is-checked";
+      checked = true;
     }
 
     assigneeButtons.add(
-      '<button class="' + cssClass + '" data-filter="' + assignee[0] + '">' + assignee[1] + '</button>'
+      '<label>' +
+      '<input data-filter="' + assignee[0] + '" type="checkbox"' + (checked ? 'checked' : '') + '>' +
+      assignee[1] +
+      '</label>'
     );
   }
 
@@ -140,15 +128,7 @@ function buildAssigneeButtons(regions, selectedAssignees) {
     }
   }
 
-  if (selectedAssignees && (selectedAssignees.length === 0)) {
-    checkFilterTypeShowAll("assignee")
-  }
-
   assigneeButtonGroup.append(Array.from(assigneeButtons));
-}
-
-function checkFilterTypeShowAll(filterType) {
-  $('#' + filterType + '-show-all').addClass('is-checked');
 }
 
 function filterByUrlParameters(issueGrid) {
@@ -159,12 +139,10 @@ function filterByUrlParameters(issueGrid) {
   while (match = urlFilterRegex.exec(location.href)) {
     var filterType = match[1];
 
-    uncheckFilterTypeShowAll(filterType);
-
     groupFilters[filterType] = match[2].split('+').map(function(filter) {
         filter = '.' + filter;
   
-        $("button[data-filter='" + filter + "'").toggleClass('is-checked');
+        $("input[data-filter='" + filter + "'").prop('checked', true);
   
         return filter;
       });
@@ -217,28 +195,12 @@ function getIssueUpdateStatus(issue) {
   }
 }
 
-function removeFilter(filter, filterType, filterGroup) {
+function removeFilter(filter, filterGroup) {
   var index = filterGroup.indexOf(filter);
 
   if (index != -1) {
     filterGroup.splice(index, 1);
   }
-
-  if (filterGroup.length == 0) {
-    checkFilterTypeShowAll(filterType)
-  }
-}
-
-function showAll(filterType) {
-  checkFilterTypeShowAll(filterType)
-
-  $('div[filter-type=' + filterType + ']').find('.button:not(.show-all)').each(function() {
-    $(this).removeClass('is-checked');
-  });
-}
-
-function uncheckFilterTypeShowAll(filterType) {
-  $('#' + filterType + '-show-all').removeClass('is-checked');
 }
 
 function updateIssueGrid(issueGrid) {
