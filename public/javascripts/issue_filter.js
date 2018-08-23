@@ -1,39 +1,13 @@
 var assigneeButtonGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var clearFilters;
+var grid;
 var groupFilters = {};
 var issueGrid;
 
 $(document).ready(function() {
   clearFilters = $('#clear-filters');
-
-  var grid = $('.grid');
-
-  issues.forEach(function(issue) {
-    var issueUpdateStatus = getIssueUpdateStatus(issue);
-
-    grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
-        '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
-        '<div class="issue-details">' +
-          '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
-          '<img class="issue-icon-priority" src="/images/' + issue.priority + '.svg" />' +
-          '<img class="issue-icon" src="/images/' + issue.issueType + '.svg" />' +
-          (issue.flagged ? '<img class="issue-icon-flag" src="/images/flag.svg" />' : '') +
-          '<span class="issue-assignee">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
-          '<span class="issue-summary">' + issue.summary + '</span>' +
-          (issue.openDependencies ? '<br> <br> <span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' : '') +
-        '</div>' +
-      '</div>'
-    );
-
-    var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
-
-    if (assignees[issue.region].indexOf(assignee) < 0) {
-      assignees[issue.region].push(assignee);
-    }
-  });
-
+  grid = $('.grid');
   assigneeButtonGroup = $('#assignee-button-group');
 
   issueGrid = grid.isotope({
@@ -43,6 +17,8 @@ $(document).ready(function() {
       gutter: 5
     }
   });
+
+  populateIssueGrid();
 
   filterByUrlParameters();
 
@@ -204,6 +180,33 @@ function getIssueUpdateStatus(issue) {
   else {
     return "needs-update";
   }
+}
+
+function populateIssueGrid() {
+  issues.forEach(function(issue) {
+    var issueUpdateStatus = getIssueUpdateStatus(issue);
+
+    grid.append(
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+        '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
+        '<div class="issue-details">' +
+          '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
+          '<img class="issue-icon-priority" src="/images/' + issue.priority + '.svg" />' +
+          '<img class="issue-icon" src="/images/' + issue.issueType + '.svg" />' +
+          (issue.flagged ? '<img class="issue-icon-flag" src="/images/flag.svg" />' : '') +
+          '<span class="issue-assignee">' + issue.assigneeDisplayName + ' </span> <br> <br>' +
+          '<span class="issue-summary">' + issue.summary + '</span>' +
+          (issue.openDependencies ? '<br> <br> <span class="issue-summary">' + issue.openDependencies.join(", ") + '</span>' : '') +
+        '</div>' +
+      '</div>'
+    );
+
+    var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
+
+    if (assignees[issue.region].indexOf(assignee) < 0) {
+      assignees[issue.region].push(assignee);
+    }
+  });
 }
 
 function removeAllFilters() {
