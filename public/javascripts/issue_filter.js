@@ -129,6 +129,7 @@ function filterByUrlParameters(issueGrid) {
   var urlFilterRegex = /[?&]+([^=&]+)=([^&]*)/gi;
 
   var match;
+  var selectedFilters = [];
 
   while (match = urlFilterRegex.exec(location.href)) {
     var filterType = match[1];
@@ -136,17 +137,21 @@ function filterByUrlParameters(issueGrid) {
     groupFilters[filterType] = match[2].split('+').map(function(filter) {
         filter = '.' + filter;
 
-        var filterCheckbox = $("input[data-filter='" + filter + "'");
-
-        filterCheckbox.prop('checked', true);
-
-        addSelectedFilter(filter, filterCheckbox.parent()[0].innerText);
+        selectedFilters.push(filter);
 
         return filter;
       });
   }
 
   buildAssigneeCheckboxes(groupFilters["region"], groupFilters["assignee"]);
+
+  selectedFilters.forEach(function(filter) {
+    var filterCheckbox = $("input[data-filter='" + filter + "'");
+
+    filterCheckbox.prop('checked', true);
+
+    addSelectedFilter(filter, filterCheckbox.parent()[0].innerText);
+  });
 
   updateIssueGrid(issueGrid);
 }
