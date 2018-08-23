@@ -10,6 +10,8 @@ $(document).ready(function() {
   grid = $('.grid');
   assigneeButtonGroup = $('#assignee-button-group');
 
+  populateIssueGrid();
+
   issueGrid = grid.isotope({
     itemSelector: '.issue-element',
     masonry: {
@@ -17,8 +19,6 @@ $(document).ready(function() {
       gutter: 5
     }
   });
-
-  populateIssueGrid();
 
   filterByUrlParameters();
 
