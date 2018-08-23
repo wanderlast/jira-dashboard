@@ -2,6 +2,7 @@ var assigneeButtonGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var clearFilters;
 var groupFilters = {};
+var issueGrid;
 
 $(document).ready(function() {
   clearFilters = $('#clear-filters');
@@ -35,7 +36,7 @@ $(document).ready(function() {
 
   assigneeButtonGroup = $('#assignee-button-group');
 
-  var issueGrid = grid.isotope({
+  issueGrid = grid.isotope({
     itemSelector: '.issue-element',
     masonry: {
       columnWidth: 75,
@@ -43,14 +44,14 @@ $(document).ready(function() {
     }
   });
 
-  filterByUrlParameters(issueGrid);
+  filterByUrlParameters();
 
   clearFilters.click(function() {
-    removeAllFilters(issueGrid);
+    removeAllFilters();
   });
 
   $('#filters').on('change', 'input[type=checkbox]', function(event) {
-    updateFilter($(event.currentTarget), issueGrid);
+    updateFilter($(event.currentTarget));
   });
 
   $("#selected-filters").on('click', 'span', function(event) {
@@ -60,7 +61,7 @@ $(document).ready(function() {
 
     filter.prop('checked', false);
 
-    updateFilter(filter, issueGrid);
+    updateFilter(filter);
   })
 });
 
@@ -132,7 +133,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
   assigneeButtonGroup.append(Array.from(assigneeButtons));
 }
 
-function filterByUrlParameters(issueGrid) {
+function filterByUrlParameters() {
   var urlFilterRegex = /[?&]+([^=&]+)=([^&]*)/gi;
 
   var match;
@@ -160,7 +161,7 @@ function filterByUrlParameters(issueGrid) {
     addSelectedFilter(filter, filterCheckbox.parent()[0].innerText);
   });
 
-  updateIssueGrid(issueGrid);
+  updateIssueGrid();
 }
 
 function getFilterCombinations(arr) {
@@ -205,7 +206,7 @@ function getIssueUpdateStatus(issue) {
   }
 }
 
-function removeAllFilters(issueGrid) {
+function removeAllFilters() {
   var selectedFilters = $('input:checkbox:checked');
 
   selectedFilters.each(function(key, filter) {
@@ -220,7 +221,7 @@ function removeAllFilters(issueGrid) {
 
   buildAssigneeCheckboxes();
 
-  updateIssueGrid(issueGrid);
+  updateIssueGrid();
 
   updateWindowHistoryState();
 }
@@ -237,7 +238,7 @@ function removeSelectedFilter(filter) {
   $("#\\" + filter + "-selected").remove();
 }
 
-function updateIssueGrid(issueGrid) {
+function updateIssueGrid() {
   var filters = [];
 
   for (var key in groupFilters) {
@@ -262,7 +263,7 @@ function updateIssueGrid(issueGrid) {
   });
 }
 
-function updateFilter(target, issueGrid) {
+function updateFilter(target) {
   var isChecked = target.prop('checked');
   var filter = target.attr('data-filter');
   var filterType = target.parent().parent().attr('filter-type');
@@ -288,7 +289,7 @@ function updateFilter(target, issueGrid) {
     buildAssigneeCheckboxes(filterGroup, groupFilters["assignee"]);
   }
 
-  updateIssueGrid(issueGrid);
+  updateIssueGrid();
 
   updateWindowHistoryState();
 }
