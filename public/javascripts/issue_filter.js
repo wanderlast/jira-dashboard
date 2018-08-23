@@ -55,7 +55,7 @@ function addFilter(filter, filterName, filterGroup) {
 }
 
 function buildAssigneeCheckboxes(regions, selectedAssignees) {
-  var assigneeButtons = new Set();
+  var assigneeCheckboxes = new Set();
   var assigneesToUncheck = [];
   var regionAssignees = [];
  
@@ -90,7 +90,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
       checked = true;
     }
 
-    assigneeButtons.add(
+    assigneeCheckboxes.add(
       '<label>' +
       '<input data-filter="' + assignee[0] + '" type="checkbox"' + (checked ? 'checked' : '') + '>' +
       assignee[1] +
@@ -106,7 +106,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
     }
   }
 
-  assigneeButtonGroup.append(Array.from(assigneeButtons));
+  assigneeButtonGroup.append(Array.from(assigneeCheckboxes));
 }
 
 function filterByUrlParameters() {
