@@ -111,5 +111,6 @@ input[type="checkbox"] {
 	}
 
 		.selected-filters label span {
+			cursor: pointer;
 			padding-left: 5px;
 		}
