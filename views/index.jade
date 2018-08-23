@@ -8,72 +8,73 @@ block content
   script(src="/javascripts/isotope.pkgd.min.js")
   script(src="/javascripts/issue_filter.js")
 
-  div(class="filters", id="filters")
-    h3 Ticket Type
-    div(class="button-group", filter-type="type")
-      label
-        input(data-filter=".l1-escalation" type="checkbox")
-        | Escalation
-      label
-        input(data-filter=".patch" type="checkbox")
-        | Patch
-      label
-        input(data-filter=".task" type="checkbox")
-        | Task
-    h3 Priority
-    div(class="button-group", filter-type="priority")
-      label
-        input(data-filter=".minor" type="checkbox")
-        | Minor
-      label
-        input(data-filter=".major" type="checkbox")
-        | Major
-      label
-        input(data-filter=".critical" type="checkbox")
-        | Critical
-    h3 Region
-    div(class="button-group", filter-type="region")
-      label
-        input(data-filter=".apac" type="checkbox")
-        | APAC
-      label
-        input(data-filter=".brazil" type="checkbox")
-        | Brazil
-      label
-        input(data-filter=".eu" type="checkbox")
-        | EU
-      label
-        input(data-filter=".india" type="checkbox")
-        | India
-      label
-        input(data-filter=".japan" type="checkbox")
-        | Japan
-      label
-        input(data-filter=".spain" type="checkbox")
-        | Spain
-      label
-        input(data-filter=".us" type="checkbox")
-        | US
-    h3 Update
-    div(class="button-group", filter-type="update")
-      label
-        input(data-filter=".up-to-date" type="checkbox")
-        | Up to Date
-      label
-        input(data-filter=".update-soon" type="checkbox")
-        | Update Soon
-      label
-        input(data-filter=".needs-update" type="checkbox")
-        | Needs Update
-    h3 Status
-    div(class="button-group", filter-type="status")
-      label
-        input(data-filter=".blocked" type="checkbox")
-        | Blocked
-      label
-        input(data-filter=".flagged" type="checkbox")
-        | Flagged
-    h3 Assignee
-    div(class="button-group", filter-type="assignee", id="assignee-button-group")
-  div(class="selected-filters", id="selected-filters")
-  div(class="grid", id="grid")
+  div(class="container")
+    div(class="filters", id="filters")
+      h3 Ticket Type
+      div(class="button-group", filter-type="type")
+        label
+          input(data-filter=".l1-escalation" type="checkbox")
+          | Escalation
+        label
+          input(data-filter=".patch" type="checkbox")
+          | Patch
+        label
+          input(data-filter=".task" type="checkbox")
+          | Task
+      h3 Priority
+      div(class="button-group", filter-type="priority")
+        label
+          input(data-filter=".minor" type="checkbox")
+          | Minor
+        label
+          input(data-filter=".major" type="checkbox")
+          | Major
+        label
+          input(data-filter=".critical" type="checkbox")
+          | Critical
+      h3 Region
+      div(class="button-group", filter-type="region")
+        label
+          input(data-filter=".apac" type="checkbox")
+          | APAC
+        label
+          input(data-filter=".brazil" type="checkbox")
+          | Brazil
+        label
+          input(data-filter=".eu" type="checkbox")
+          | EU
+        label
+          input(data-filter=".india" type="checkbox")
+          | India
+        label
+          input(data-filter=".japan" type="checkbox")
+          | Japan
+        label
+          input(data-filter=".spain" type="checkbox")
+          | Spain
+        label
+          input(data-filter=".us" type="checkbox")
+          | US
+      h3 Update
+      div(class="button-group", filter-type="update")
+        label
+          input(data-filter=".up-to-date" type="checkbox")
+          | Up to Date
+        label
+          input(data-filter=".update-soon" type="checkbox")
+          | Update Soon
+        label
+          input(data-filter=".needs-update" type="checkbox")
+          | Needs Update
+      h3 Status
+      div(class="button-group", filter-type="status")
+        label
+          input(data-filter=".blocked" type="checkbox")
+          | Blocked
+        label
+          input(data-filter=".flagged" type="checkbox")
+          | Flagged
+      h3 Assignee
+      div(class="button-group", filter-type="assignee", id="assignee-button-group")
+    div(class="selected-filters", id="selected-filters")
+    div(class="grid", id="grid")
