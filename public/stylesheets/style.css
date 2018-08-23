@@ -3,11 +3,6 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-label {
-	cursor: pointer;
-	display: block;
-}
-
 input, input:active, input:focus {
     outline: none;
 }
@@ -24,6 +19,11 @@ input[type="checkbox"] {
 	float: left;
 	width: 20%;
 }
+
+	.filters label {
+		cursor: pointer;
+		display: block;
+	}
 
 .grid {
 	margin-left: 20%;
