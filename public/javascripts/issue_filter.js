@@ -41,13 +41,11 @@ $(document).ready(function() {
   })
 });
 
-function addFilter(filter, filterGroup) {
-  if (filterGroup.indexOf(filter) == -1) {
+function addFilter(filter, filterName, filterGroup) {
+  if (filterGroup && filterGroup.indexOf(filter) === -1) {
     filterGroup.push(filter);
   }
-}
 
-function addSelectedFilter(filter, filterName) {
   $('#selected-filters').append(
     '<label id="' + filter + '-selected">' +
       filterName +
@@ -104,7 +102,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
     for (var k = 0; k < assigneesToUncheck.length; k++) {
       selectedAssignees.splice(selectedAssignees.indexOf(assigneesToUncheck[k]), 1);
 
-      removeSelectedFilter(assigneesToUncheck[k]);
+      removeFilter(assigneesToUncheck[k]);
     }
   }
 
@@ -136,7 +134,7 @@ function filterByUrlParameters() {
 
     filterCheckbox.prop('checked', true);
 
-    addSelectedFilter(filter, filterCheckbox.parent()[0].innerText);
+    addFilter(filter, filterCheckbox.parent()[0].innerText);
   });
 
   updateIssueGrid();
@@ -217,7 +215,7 @@ function removeAllFilters() {
   selectedFilters.each(function(key, filter) {
     $(filter).prop('checked', false);
 
-    removeSelectedFilter($(filter).attr('data-filter'));
+    removeFilter($(filter).attr('data-filter'));
   });
 
   for (var key in groupFilters) {
@@ -232,14 +230,14 @@ function removeAllFilters() {
 }
 
 function removeFilter(filter, filterGroup) {
-  var index = filterGroup.indexOf(filter);
+  if (filterGroup) {
+    var index = filterGroup.indexOf(filter);
 
-  if (index != -1) {
-    filterGroup.splice(index, 1);
+    if (index !== -1) {
+      filterGroup.splice(index, 1);
+    }
   }
-}
 
-function removeSelectedFilter(filter) {
   $("#\\" + filter + "-selected").remove();
 }
 
@@ -271,6 +269,7 @@ function updateIssueGrid() {
 function updateFilter(target) {
   var isChecked = target.prop('checked');
   var filter = target.attr('data-filter');
+  var filterName = target.parent()[0].innerText;
   var filterType = target.parent().parent().attr('filter-type');
 
   var filterGroup = groupFilters[filterType];
@@ -280,14 +279,10 @@ function updateFilter(target) {
   }
 
   if (isChecked) {
-    addFilter(filter, filterGroup);
-
-    addSelectedFilter(filter, target.parent()[0].innerText);
+    addFilter(filter, filterName, filterGroup);
   }
   else {
     removeFilter(filter, filterGroup);
-
-    removeSelectedFilter(filter);
   }
 
   if (filterType === "region") {
