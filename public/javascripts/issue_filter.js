@@ -57,9 +57,13 @@ $(document).ready(function() {
 
     if (isChecked) {
       addFilter(filter, filterGroup);
+
+      addSelectedFilter(filter, target.parent()[0].innerText);
     }
     else {
       removeFilter(filter, filterGroup);
+
+      removeSelectedFilter(filter + "-selected");
     }
 
     if (filterType === "region") {
@@ -70,12 +74,25 @@ $(document).ready(function() {
 
     updateWindowHistoryState();
   });
+
+  $("#selected-filters").on('click', 'span', function(event) {
+    removeSelectedFilter($(event.currentTarget).parent()[0].id);
+  })
 });
 
 function addFilter(filter, filterGroup) {
   if (filterGroup.indexOf(filter) == -1) {
     filterGroup.push(filter);
   }
+}
+
+function addSelectedFilter(filter, filterName) {
+  $('#selected-filters').append(
+    '<label id="' + filter + '-selected">' +
+      filterName +
+      '<span>x</span>' +
+    '</label>'
+  )
 }
 
 function buildAssigneeCheckboxes(regions, selectedAssignees) {
@@ -141,9 +158,13 @@ function filterByUrlParameters(issueGrid) {
 
     groupFilters[filterType] = match[2].split('+').map(function(filter) {
         filter = '.' + filter;
-  
-        $("input[data-filter='" + filter + "'").prop('checked', true);
-  
+
+        var filterCheckbox = $("input[data-filter='" + filter + "'");
+
+        filterCheckbox.prop('checked', true);
+
+        addSelectedFilter(filter, filterCheckbox.parent()[0].innerText);
+
         return filter;
       });
   }
@@ -201,6 +222,10 @@ function removeFilter(filter, filterGroup) {
   if (index != -1) {
     filterGroup.splice(index, 1);
   }
+}
+
+function removeSelectedFilter(filter) {
+  $("#\\" + filter).remove();
 }
 
 function updateIssueGrid(issueGrid) {
