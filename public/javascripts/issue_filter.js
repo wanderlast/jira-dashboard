@@ -211,7 +211,7 @@ function removeAllFilters(issueGrid) {
   selectedFilters.each(function(key, filter) {
     $(filter).prop('checked', false);
 
-    removeSelectedFilter($(filter).attr('data-filter') + "-selected");
+    removeSelectedFilter($(filter).attr('data-filter'));
   });
 
   for (var key in groupFilters) {
@@ -234,7 +234,7 @@ function removeFilter(filter, filterGroup) {
 }
 
 function removeSelectedFilter(filter) {
-  $("#\\" + filter).remove();
+  $("#\\" + filter + "-selected").remove();
 }
 
 function updateIssueGrid(issueGrid) {
@@ -281,7 +281,7 @@ function updateFilter(target, issueGrid) {
   else {
     removeFilter(filter, filterGroup);
 
-    removeSelectedFilter(filter + "-selected");
+    removeSelectedFilter(filter);
   }
 
   if (filterType === "region") {
