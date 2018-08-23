@@ -103,6 +103,8 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
   if (assigneesToUncheck && (assigneesToUncheck.length > 0)) {
     for (var k = 0; k < assigneesToUncheck.length; k++) {
       selectedAssignees.splice(selectedAssignees.indexOf(assigneesToUncheck[k]), 1);
+
+      removeSelectedFilter(assigneesToUncheck[k]);
     }
   }
 
