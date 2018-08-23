@@ -43,40 +43,17 @@ $(document).ready(function() {
   filterByUrlParameters(issueGrid);
 
   $('#filters').on('change', 'input[type=checkbox]', function(event) {
-    var target = $(event.currentTarget);
-
-    var isChecked = target.prop('checked');
-    var filter = target.attr('data-filter');
-    var filterType = target.parent().parent().attr('filter-type');
-
-    var filterGroup = groupFilters[filterType];
-
-    if (!filterGroup) {
-      filterGroup = groupFilters[filterType] = [];
-    }
-
-    if (isChecked) {
-      addFilter(filter, filterGroup);
-
-      addSelectedFilter(filter, target.parent()[0].innerText);
-    }
-    else {
-      removeFilter(filter, filterGroup);
-
-      removeSelectedFilter(filter + "-selected");
-    }
-
-    if (filterType === "region") {
-      buildAssigneeCheckboxes(filterGroup, groupFilters["assignee"]);
-    }
-
-    updateIssueGrid(issueGrid);
-
-    updateWindowHistoryState();
+    updateFilter($(event.currentTarget), issueGrid);
   });
 
   $("#selected-filters").on('click', 'span', function(event) {
-    removeSelectedFilter($(event.currentTarget).parent()[0].id);
+    var selectedFilterId = $(event.currentTarget).parent()[0].id;
+
+    var filter = $("input[data-filter='" + selectedFilterId.substring(0, selectedFilterId.indexOf("-selected")) + "'");
+
+    filter.prop('checked', false);
+
+    updateFilter(filter, issueGrid);
   })
 });
 
@@ -244,6 +221,37 @@ function updateIssueGrid(issueGrid) {
   issueGrid.isotope({
     filter: filterCombinations.toString()
   });
+}
+
+function updateFilter(target, issueGrid) {
+  var isChecked = target.prop('checked');
+  var filter = target.attr('data-filter');
+  var filterType = target.parent().parent().attr('filter-type');
+
+  var filterGroup = groupFilters[filterType];
+
+  if (!filterGroup) {
+    filterGroup = groupFilters[filterType] = [];
+  }
+
+  if (isChecked) {
+    addFilter(filter, filterGroup);
+
+    addSelectedFilter(filter, target.parent()[0].innerText);
+  }
+  else {
+    removeFilter(filter, filterGroup);
+
+    removeSelectedFilter(filter + "-selected");
+  }
+
+  if (filterType === "region") {
+    buildAssigneeCheckboxes(filterGroup, groupFilters["assignee"]);
+  }
+
+  updateIssueGrid(issueGrid);
+
+  updateWindowHistoryState();
 }
 
 function updateWindowHistoryState() {
