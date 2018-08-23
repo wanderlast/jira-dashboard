@@ -1,8 +1,11 @@
 var assigneeButtonGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
+var clearFilters;
 var groupFilters = {};
 
 $(document).ready(function() {
+  clearFilters = $('#clear-filters');
+
   var grid = $('.grid');
 
   issues.forEach(function(issue) {
@@ -41,6 +44,10 @@ $(document).ready(function() {
   });
 
   filterByUrlParameters(issueGrid);
+
+  clearFilters.click(function() {
+    removeAllFilters(issueGrid);
+  });
 
   $('#filters').on('change', 'input[type=checkbox]', function(event) {
     updateFilter($(event.currentTarget), issueGrid);
@@ -198,6 +205,26 @@ function getIssueUpdateStatus(issue) {
   }
 }
 
+function removeAllFilters(issueGrid) {
+  var selectedFilters = $('input:checkbox:checked');
+
+  selectedFilters.each(function(key, filter) {
+    $(filter).prop('checked', false);
+
+    removeSelectedFilter($(filter).attr('data-filter') + "-selected");
+  });
+
+  for (var key in groupFilters) {
+    groupFilters[key] = [];
+  }
+
+  buildAssigneeCheckboxes();
+
+  updateIssueGrid(issueGrid);
+
+  updateWindowHistoryState();
+}
+
 function removeFilter(filter, filterGroup) {
   var index = filterGroup.indexOf(filter);
 
@@ -222,10 +249,10 @@ function updateIssueGrid(issueGrid) {
   }
 
   if (filters.length) {
-    $('#clear-filters').show();
+    clearFilters.show();
   }
   else {
-    $('#clear-filters').hide();
+    clearFilters.hide();
   }
 
   var filterCombinations = getFilterCombinations(filters);

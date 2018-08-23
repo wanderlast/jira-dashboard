@@ -15,6 +15,10 @@ input[type="checkbox"] {
 	cursor: pointer;
 }
 
+.clear-filters {
+	cursor: pointer;
+}
+
 .container {
 	margin: auto;
 	width: 85%;
