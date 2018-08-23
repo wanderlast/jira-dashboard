@@ -221,6 +221,13 @@ function updateIssueGrid(issueGrid) {
     }
   }
 
+  if (filters.length) {
+    $('#clear-filters').show();
+  }
+  else {
+    $('#clear-filters').hide();
+  }
+
   var filterCombinations = getFilterCombinations(filters);
 
   issueGrid.isotope({

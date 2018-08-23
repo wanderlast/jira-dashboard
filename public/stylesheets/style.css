@@ -102,21 +102,20 @@ input[type="checkbox"] {
 	background-color: yellow;
 }
 
-.selected-filters {
-	margin-left: 20%;
-	height: 50px;
-	padding-top: 20px;
-	width: 80%;
+.selected-filters label {
+	border: 1px solid grey;
+	color: grey;
+	margin: 5px;
+	padding: 5px;
 }
 
-	.selected-filters label {
-		border: 1px solid grey;
-		color: grey;
-		margin: 5px;
-		padding: 5px;
+	.selected-filters label span {
+		cursor: pointer;
+		padding-left: 5px;
 	}
 
-		.selected-filters label span {
-			cursor: pointer;
-			padding-left: 5px;
-		}
+.selected-filters-container {
+	display: flex;
+	padding: 20px 0;
+	width: 80%;
+}
