@@ -190,7 +190,7 @@ function populateIssueGrid() {
       '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
-          '<a href="https://issues.liferay.com/browse/' + issue.key + '">' + issue.key + '</a>' +
+          '<a href="https://issues.liferay.com/browse/' + issue.key + '" target=”_blank”>' + issue.key + '</a>' +
           '<img class="issue-icon-priority" src="/images/' + issue.priority + '.svg" />' +
           '<img class="issue-icon" src="/images/' + issue.issueType + '.svg" />' +
           (issue.flagged ? '<img class="issue-icon-flag" src="/images/flag.svg" />' : '') +
