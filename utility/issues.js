@@ -120,8 +120,6 @@ function fetchIssues() {
       });
 
       fs.writeFile("issues.json", JSON.stringify(issues));
-
-      console.log("Finished writing JSON");
     }
   });
 }
