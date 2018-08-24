@@ -1,4 +1,4 @@
-var assigneeButtonGroup;
+var assigneeCheckboxGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var clearFilters;
 var filters;
@@ -7,10 +7,10 @@ var groupFilters = {};
 var issueGrid;
 
 $(document).ready(function() {
+  assigneeCheckboxGroup = $('#assignee-checkbox-group');
   clearFilters = $('#clear-filters');
   filters = $('#filters');
   grid = $('.grid');
-  assigneeButtonGroup = $('#assignee-button-group');
 
   populateIssueGrid();
 
@@ -114,7 +114,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
     }
   }
 
-  assigneeButtonGroup.append(Array.from(assigneeCheckboxes));
+  assigneeCheckboxGroup.append(Array.from(assigneeCheckboxes));
 }
 
 function filterByUrlParameters() {
