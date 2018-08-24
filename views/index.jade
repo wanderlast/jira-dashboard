@@ -10,8 +10,10 @@ block content
 
   div(class="container")
     div(class="filters", id="filters")
-      h3 Ticket Type
-      div(class="button-group", filter-type="type")
+      h3(class="accordion")
+        | Ticket Type
+        div(class="arrow")
+      div(class="accordion-content", filter-type="type")
         label
           input(data-filter=".l1-escalation" type="checkbox")
           | Escalation
@@ -21,8 +23,10 @@ block content
         label
           input(data-filter=".task" type="checkbox")
           | Task
-      h3 Priority
-      div(class="button-group", filter-type="priority")
+      h3(class="accordion")
+        | Priority
+        div(class="arrow")
+      div(class="accordion-content", filter-type="priority")
         label
           input(data-filter=".minor" type="checkbox")
           | Minor
@@ -32,8 +36,10 @@ block content
         label
           input(data-filter=".critical" type="checkbox")
           | Critical
-      h3 Region
-      div(class="button-group", filter-type="region")
+      h3(class="accordion")
+        | Region
+        div(class="arrow")
+      div(class="accordion-content", filter-type="region")
         label
           input(data-filter=".apac" type="checkbox")
           | APAC
@@ -55,8 +61,10 @@ block content
         label
           input(data-filter=".us" type="checkbox")
           | US
-      h3 Update
-      div(class="button-group", filter-type="update")
+      h3(class="accordion")
+        | Update
+        div(class="arrow")
+      div(class="accordion-content", filter-type="update")
         label
           input(data-filter=".up-to-date" type="checkbox")
           | Up to Date
@@ -66,16 +74,20 @@ block content
         label
           input(data-filter=".needs-update" type="checkbox")
           | Needs Update
-      h3 Status
-      div(class="button-group", filter-type="status")
+      h3(class="accordion")
+        | Status
+        div(class="arrow")
+      div(class="accordion-content", filter-type="status")
         label
           input(data-filter=".blocked" type="checkbox")
           | Blocked
         label
           input(data-filter=".flagged" type="checkbox")
           | Flagged
-      h3 Assignee
-      div(class="button-group", filter-type="assignee", id="assignee-button-group")
+      h3(class="accordion")
+        | Assignee
+        div(class="arrow")
+      div(class="accordion-content", filter-type="assignee", id="assignee-button-group")
     div(class="selected-filters-container")
       div(class="selected-filters", id="selected-filters")
       div(class="clear-filters", id="clear-filters")

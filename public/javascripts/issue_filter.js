@@ -1,12 +1,14 @@
 var assigneeButtonGroup;
 var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
 var clearFilters;
+var filters;
 var grid;
 var groupFilters = {};
 var issueGrid;
 
 $(document).ready(function() {
   clearFilters = $('#clear-filters');
+  filters = $('#filters');
   grid = $('.grid');
   assigneeButtonGroup = $('#assignee-button-group');
 
@@ -26,8 +28,14 @@ $(document).ready(function() {
     removeAllFilters();
   });
 
-  $('#filters').on('change', 'input[type=checkbox]', function(event) {
+  filters.on('change', 'input[type=checkbox]', function(event) {
     updateFilter($(event.currentTarget));
+  });
+
+  filters.find('.accordion').click(function() {
+    $(this).next().slideToggle('fast');
+
+    $($(this).children()[0]).toggleClass('active');
   });
 
   $("#selected-filters").on('click', 'span', function(event) {
