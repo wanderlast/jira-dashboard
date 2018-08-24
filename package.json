@@ -6,7 +6,9 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "basic-auth-client-promise": "^1.0.4",
     "express": "~4.15.5",
+    "express-basic-auth": "^1.1.5",
     "jade": "~1.11.0",
     "jira-connector": "^2.7.0",
     "node-cron": "^1.2.1",
