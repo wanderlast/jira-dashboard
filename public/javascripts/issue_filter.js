@@ -5,12 +5,14 @@ var filters;
 var grid;
 var groupFilters = {};
 var issueGrid;
+var selectedFilters;
 
 $(document).ready(function() {
   assigneeCheckboxGroup = $('#assignee-checkbox-group');
   clearFilters = $('#clear-filters');
   filters = $('#filters');
   grid = $('.grid');
+  selectedFilters = $("#selected-filters");
 
   populateIssueGrid();
 
@@ -38,7 +40,7 @@ $(document).ready(function() {
     $($(this).children()[0]).toggleClass('active');
   });
 
-  $("#selected-filters").on('click', 'span', function(event) {
+  selectedFilters.on('click', 'span', function(event) {
     var selectedFilterId = $(event.currentTarget).parent()[0].id;
 
     var filter = $("input[data-filter='" + selectedFilterId.substring(0, selectedFilterId.indexOf("-selected")) + "'");
@@ -54,7 +56,7 @@ function addFilter(filter, filterName, filterGroup) {
     filterGroup.push(filter);
   }
 
-  $('#selected-filters').append(
+  selectedFilters.append(
     '<label id="' + filter + '-selected">' +
       filterName +
       '<span>x</span>' +
