@@ -33,6 +33,7 @@ app.use(function(req, res) {
 });
 
 function liferayAuthorization(user, password, callback) {
+  console.log("Trigger liferay authorization");
   login(process.env.AUTHORIZATION_URL, user, password)
     .then(function() {
       callback(null, true);

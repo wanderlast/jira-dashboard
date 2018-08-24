@@ -4,20 +4,18 @@ var JiraClient = require('jira-connector');
 var jira = new JiraClient( {
     host: 'issues.liferay.com',
     basic_auth: {
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD
+        base64: process.env.CREDENTIALS
     }
 });
 
-function fetchIssues() {
+function fetchIssueMetadata(issueKeys, start, issues) {
+  var sliceSize = 20;
+  var end = start + sliceSize;
+
+  console.log("Populating metadata for issues " + start + "-" + end);
+
   jira.search.search({
-    jql: 'project = LPP AND status NOT IN ("Resolved", "Completed", ' +
-      '"Solution Proposed", "Closed", "Audit", "On Hold") AND type IN ' +
-      '(Patch, Task, "L1 Escalation") AND assignee IN ' +
-      '(membersOf(liferay-support-ts), membersOf(liferay-support-ts-us), ' +
-      'support-hu) AND ("TS Solution Delivered" = EMPTY OR ' +
-      '"TS Solution Delivered" = No OR type = "L1 Escalation" OR type = Task) ' +
-      'ORDER BY key ASC',
+    jql: 'key in (' + issueKeys.splice(0, sliceSize).join(',') + ')',
     maxResults: 500,
     fields: [
       'key', 'fixVersions', 'customfield_12120', 'priority',
@@ -34,92 +32,49 @@ function fetchIssues() {
       console.log("Error = " + JSON.stringify(error));
     }
     else {
-      var issues = [];
+      issues = issues.concat(response.issues);
 
-      response.issues.forEach(function(issue) {
-        var trimmedIssue = {};
+      if (issueKeys.length === 0) {
+        console.log("Writing issues to file");
 
-        trimmedIssue.key = issue.key;
-        trimmedIssue.summary = issue.fields.summary;
-        trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g, "-");
-        trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
-        trimmedIssue.region = issue.fields.customfield_11523[0].value.toLowerCase();
-        trimmedIssue.lesaLink = issue.fields.customfield_10731;
-        trimmedIssue.status = issue.fields.status.name;
-        trimmedIssue.dueDate = issue.fields.duedate;
-        trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
-        trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
+        fs.writeFile("issues.json", JSON.stringify(
+          issues.map(trimIssue)
+            .sort(function (a, b) {
+              return a.key > b.key ? 1 : a.key < b.key ? -1 : 0;
+            })
+        ));
+      }
+      else {
+        fetchIssueMetadata(issueKeys, start + sliceSize, issues);
+      }
+    }
+ });
+}
 
-        trimmedIssue.component = [];
+function fetchIssues() {
+  console.log("Fetching issues");
 
-        issue.fields.components.forEach(function(component) {
-          trimmedIssue.component.push(component.name);
-        });
-
-        if (issue.fields.fixVersions) {
-          trimmedIssue.fixVersions = [];
-
-          issue.fields.fixVersions.forEach(function(fixVersion) {
-            trimmedIssue.fixVersions.push(fixVersion.name);
-          });
-        }
-
-        if (issue.fields.customfield_20720) {
-          trimmedIssue.verified = issue.fields.customfield_20720.value;
-        }
-
-        if (issue.fields.customfield_10190) {
-          trimmedIssue.flagged = true;
-        }
-
-        if (issue.fields.customfield_12120) {
-          trimmedIssue.issueFixedIn = issue.fields.customfield_12120.value;
-        }
-
-        if (issue.fields.customfield_19120) {
-          trimmedIssue.difficulty = issue.fields.customfield_19120.value;
-        }
-
-        if (issue.fields.customfield_20321) {
-          trimmedIssue.toDo = issue.fields.customfield_20321.value;
-        }
-
-        if (issue.fields.customfield_20527) {
-          trimmedIssue.openDependencies = [];
-
-          issue.fields.customfield_20527.forEach(function (openDependencies) {
-            trimmedIssue.openDependencies.push(openDependencies.value);
-          });
-        }
-
-        if (trimmedIssue.dueDate && (new Date() > Date.parse(trimmedIssue.dueDate))) {
-          trimmedIssue.isPastDueDate = true;
-        }
-        else {
-          trimmedIssue.isPastDueDate = false;
-        }
-
-        trimmedIssue.hoursSinceAssigneeComment = getHoursSinceLastComment(
-          issue.fields.comment.comments, issue.fields.assignee.key);
-
-        trimmedIssue.hoursSinceAssigned = getHoursSinceAssignedDate(
-          issue.changelog.histories, issue.fields.assignee.key);
-
-        trimmedIssue.hoursSinceStatusChange = getHoursSinceStatusChange(
-          issue.changelog.histories, trimmedIssue.status);
-
-        trimmedIssue.hoursSinceVerified = getHoursSinceVerified(
-          issue.changelog.histories);
-
-        if (trimmedIssue.openDependencies && (trimmedIssue.openDependencies.indexOf("Code Review") > -1)) {
-          trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
-            issue.changelog.histories);
-        }
-
-        issues.push(trimmedIssue);
+  jira.search.search({
+    jql: 'project = LPP AND status NOT IN ("Resolved", "Completed", ' +
+      '"Solution Proposed", "Closed", "Audit", "On Hold") AND type IN ' +
+      '(Patch, Task, "L1 Escalation") AND assignee IN ' +
+      '(membersOf(liferay-support-ts), membersOf(liferay-support-ts-us), ' +
+      'support-hu) AND ("TS Solution Delivered" = EMPTY OR ' +
+      '"TS Solution Delivered" = No OR type = "L1 Escalation" OR type = Task)',
+    maxResults: 500,
+    fields: [
+      'key'
+    ]
+  }, function(error, response) {
+    if (error) {
+      console.log("Error = " + JSON.stringify(error));
+    }
+    else {
+      var issueKeys = response.issues.map(function (issue) {
+        return issue.key
       });
 
-      fs.writeFile("issues.json", JSON.stringify(issues));
+      fetchIssueMetadata(issueKeys, 0, []);
     }
   });
 }
@@ -235,6 +190,89 @@ function getHoursSinceVerified(histories) {
       }
     }
   }
+}
+
+function trimIssue(issue) {
+  var trimmedIssue = {};
+
+  trimmedIssue.key = issue.key;
+  trimmedIssue.summary = issue.fields.summary;
+  trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g, "-");
+  trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
+  trimmedIssue.region = issue.fields.customfield_11523[0].value.toLowerCase();
+  trimmedIssue.lesaLink = issue.fields.customfield_10731;
+  trimmedIssue.status = issue.fields.status.name;
+  trimmedIssue.dueDate = issue.fields.duedate;
+  trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
+  trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
+
+  trimmedIssue.component = [];
+
+  issue.fields.components.forEach(function(component) {
+    trimmedIssue.component.push(component.name);
+  });
+
+  if (issue.fields.fixVersions) {
+    trimmedIssue.fixVersions = [];
+
+    issue.fields.fixVersions.forEach(function(fixVersion) {
+      trimmedIssue.fixVersions.push(fixVersion.name);
+    });
+  }
+
+  if (issue.fields.customfield_20720) {
+    trimmedIssue.verified = issue.fields.customfield_20720.value;
+  }
+
+  if (issue.fields.customfield_10190) {
+    trimmedIssue.flagged = true;
+  }
+
+  if (issue.fields.customfield_12120) {
+    trimmedIssue.issueFixedIn = issue.fields.customfield_12120.value;
+  }
+
+  if (issue.fields.customfield_19120) {
+    trimmedIssue.difficulty = issue.fields.customfield_19120.value;
+  }
+
+  if (issue.fields.customfield_20321) {
+    trimmedIssue.toDo = issue.fields.customfield_20321.value;
+  }
+
+  if (issue.fields.customfield_20527) {
+    trimmedIssue.openDependencies = [];
+
+    issue.fields.customfield_20527.forEach(function (openDependencies) {
+      trimmedIssue.openDependencies.push(openDependencies.value);
+    });
+  }
+
+  if (trimmedIssue.dueDate && (new Date() > Date.parse(trimmedIssue.dueDate))) {
+    trimmedIssue.isPastDueDate = true;
+  }
+  else {
+    trimmedIssue.isPastDueDate = false;
+  }
+
+  trimmedIssue.hoursSinceAssigneeComment = getHoursSinceLastComment(
+    issue.fields.comment.comments, issue.fields.assignee.key);
+
+  trimmedIssue.hoursSinceAssigned = getHoursSinceAssignedDate(
+    issue.changelog.histories, issue.fields.assignee.key);
+
+  trimmedIssue.hoursSinceStatusChange = getHoursSinceStatusChange(
+    issue.changelog.histories, trimmedIssue.status);
+
+  trimmedIssue.hoursSinceVerified = getHoursSinceVerified(
+    issue.changelog.histories);
+
+  if (trimmedIssue.openDependencies && (trimmedIssue.openDependencies.indexOf("Code Review") > -1)) {
+    trimmedIssue.hoursSincePullRequest = getHoursSinceLastPullRequest(
+      issue.changelog.histories);
+  }
+
+  return trimmedIssue;
 }
 
 module.exports = {

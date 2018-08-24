@@ -3,6 +3,8 @@ var fs = require('fs');
 var router = express.Router();
 
 router.get('/', function(req, res) {
+  console.log("Getting JSON file");
+
   fs.readFile("issues.json", "utf-8", function(err, issues) {
     if (err) {
       console.log("Error loading local JSON file");
