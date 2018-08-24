@@ -119,7 +119,7 @@ function fetchIssues() {
         issues.push(trimmedIssue);
       });
 
-      fs.writeFile("test.json", JSON.stringify(issues));
+      fs.writeFile("issues.json", JSON.stringify(issues));
 
       console.log("Finished writing JSON");
     }
