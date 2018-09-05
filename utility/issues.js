@@ -55,12 +55,14 @@ function fetchIssues(callback) {
   console.log("Fetching issues");
 
   jira.search.search({
-    jql: 'project = LPP AND status NOT IN ("Resolved", "Completed", ' +
-      '"Solution Proposed", "Closed", "Audit", "On Hold") AND type IN ' +
-      '(Patch, Task, "L1 Escalation") AND assignee IN ' +
-      '(membersOf(liferay-support-ts), membersOf(liferay-support-ts-us), ' +
-      'support-hu) AND ("TS Solution Delivered" = EMPTY OR ' +
-      '"TS Solution Delivered" = No OR type = "L1 Escalation" OR type = Task)',
+    jql: `
+      project = LPP AND status NOT IN ("Resolved", "Completed",
+      "Solution Proposed", "Closed", "Audit", "On Hold") AND type IN
+      (Patch, Task, "L1 Escalation") AND assignee IN
+      (membersOf(liferay-support-ts), membersOf(liferay-support-ts-us),
+      support-hu) AND ("TS Solution Delivered" = EMPTY OR
+      "TS Solution Delivered" = No OR type = "L1 Escalation" or Type = Task)
+    `.split('\n').join(''),
     maxResults: 500,
     fields: [
       'key'
