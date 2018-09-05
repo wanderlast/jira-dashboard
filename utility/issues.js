@@ -8,7 +8,7 @@ var jira = new JiraClient( {
     }
 });
 
-function fetchIssueMetadata(issueKeys, start, issues) {
+function fetchIssueMetadata(issueKeys, start, issues, callback) {
   var sliceSize = 20;
   var end = start + sliceSize;
 
@@ -42,16 +42,16 @@ function fetchIssueMetadata(issueKeys, start, issues) {
             .sort(function (a, b) {
               return a.key > b.key ? 1 : a.key < b.key ? -1 : 0;
             })
-        ));
+        ), callback);
       }
       else {
-        fetchIssueMetadata(issueKeys, start + sliceSize, issues);
+        fetchIssueMetadata(issueKeys, start + sliceSize, issues, callback);
       }
     }
  });
 }
 
-function fetchIssues() {
+function fetchIssues(callback) {
   console.log("Fetching issues");
 
   jira.search.search({
@@ -74,7 +74,7 @@ function fetchIssues() {
         return issue.key
       });
 
-      fetchIssueMetadata(issueKeys, 0, []);
+      fetchIssueMetadata(issueKeys, 0, [], callback);
     }
   });
 }

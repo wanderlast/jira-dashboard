@@ -6,6 +6,7 @@
 
 var app = require('../app');
 var cron = require('node-cron');
+var fs = require('fs');
 var http = require('http');
 var issues = require("../utility/issues");
 
@@ -33,8 +34,17 @@ server.on('error', onError);
  * Schedule the cron task to fetch issues every 15 minutes
  */
 
-cron.schedule('*/15 * * * *', function() {
-  issues.fetchIssues();
+function scheduleFetchIssues() {
+  cron.schedule('*/15 * * * *', issues.fetchIssues);
+}
+
+fs.lstat('issues.json', function(err, stats) {
+  if (err) {
+    issues.fetchIssues(scheduleFetchIssues);
+  }
+  else {
+    scheduleFetchIssues();
+  }
 });
 
 /**
