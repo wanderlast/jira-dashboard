@@ -57,11 +57,9 @@ function fetchIssues(callback) {
   jira.search.search({
     jql: `
       project = LPP AND status NOT IN ("Resolved", "Completed",
-      "Solution Proposed", "Closed", "Audit", "On Hold") AND type IN
-      (Patch, Task, "L1 Escalation") AND assignee IN
+      "Solution Proposed", "Closed", "Audit", "On Hold") AND assignee IN
       (membersOf(liferay-support-ts), membersOf(liferay-support-ts-us),
-      support-hu) AND ("TS Solution Delivered" = EMPTY OR
-      "TS Solution Delivered" = No OR type = "L1 Escalation" or Type = Task)
+      support-hu) AND ("TS Solution Delivered" IN (EMPTY, No) OR type != Patch)
     `.split('\n').join(''),
     maxResults: 500,
     fields: [
@@ -197,28 +195,28 @@ function getHoursSinceVerified(histories) {
 function trimIssue(issue) {
   var trimmedIssue = {};
 
+  var regionField = issue.fields.customfield_11523;
+
   trimmedIssue.key = issue.key;
   trimmedIssue.summary = issue.fields.summary;
   trimmedIssue.issueType = issue.fields.issuetype.name.toLowerCase().replace(/ /g, "-");
   trimmedIssue.priority = issue.fields.priority.name.toLowerCase();
-  trimmedIssue.region = issue.fields.customfield_11523[0].value.toLowerCase();
+  trimmedIssue.region = regionField ? regionField[0].value.toLowerCase() : null;
   trimmedIssue.lesaLink = issue.fields.customfield_10731;
   trimmedIssue.status = issue.fields.status.name;
   trimmedIssue.dueDate = issue.fields.duedate;
   trimmedIssue.assignee = issue.fields.assignee.key.replace(/\./g, "-");
   trimmedIssue.assigneeDisplayName = issue.fields.assignee.displayName;
 
-  trimmedIssue.component = [];
-
-  issue.fields.components.forEach(function(component) {
-    trimmedIssue.component.push(component.name);
-  });
+  if (issue.fields.components) {
+    trimmedIssue.component = issue.fields.components.map(function(component) {
+      return component.name;
+    });
+  }
 
   if (issue.fields.fixVersions) {
-    trimmedIssue.fixVersions = [];
-
-    issue.fields.fixVersions.forEach(function(fixVersion) {
-      trimmedIssue.fixVersions.push(fixVersion.name);
+    trimmedIssue.fixVersions = issue.fields.fixVersions.map(function(fixVersion) {
+      return fixVersion.name;
     });
   }
 
@@ -243,10 +241,8 @@ function trimIssue(issue) {
   }
 
   if (issue.fields.customfield_20527) {
-    trimmedIssue.openDependencies = [];
-
-    issue.fields.customfield_20527.forEach(function (openDependencies) {
-      trimmedIssue.openDependencies.push(openDependencies.value);
+    trimmedIssue.openDependencies = issue.fields.customfield_20527.map(function (openDependencies) {
+      return openDependencies.value;
     });
   }
 

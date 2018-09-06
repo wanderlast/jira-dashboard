@@ -68,7 +68,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
   var assigneeCheckboxes = new Set();
   var assigneesToUncheck = [];
   var regionAssignees = [];
- 
+
   if (selectedAssignees) {
     assigneesToUncheck = selectedAssignees.slice();
   }
@@ -213,7 +213,7 @@ function populateIssueGrid() {
 
     var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
 
-    if (assignees[issue.region].indexOf(assignee) < 0) {
+    if ((issue.region) && (assignees[issue.region].indexOf(assignee) < 0)) {
       assignees[issue.region].push(assignee);
     }
   });
