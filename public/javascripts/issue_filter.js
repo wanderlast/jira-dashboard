@@ -1,5 +1,5 @@
 var assigneeCheckboxGroup;
-var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": []};
+var assignees = {"apac": [], "brazil": [], "eu": [], "india": [], "japan": [], "spain": [], "us": [], "no-region": []};
 var clearFilters;
 var filters;
 var grid;
@@ -76,7 +76,7 @@ function buildAssigneeCheckboxes(regions, selectedAssignees) {
   $('div[filter-type=assignee]').empty();
 
   if (!regions || regions.length === 0) {
-    regions = ["apac", "brazil", "eu", "india", "japan", "spain", "us"];
+    regions = Object.keys(assignees);
   }
 
   for (var i = 0; i < regions.length; i++) {
@@ -144,7 +144,11 @@ function filterByUrlParameters() {
 
     filterCheckbox.prop('checked', true);
 
-    addFilter(filter, filterCheckbox.parent()[0].innerText);
+    var filterCheckboxParent = filterCheckbox.parent()[0];
+
+    if (filterCheckboxParent) {
+      addFilter(filter, filterCheckboxParent.innerText);
+    }
   });
 
   updateIssueGrid();
@@ -197,7 +201,7 @@ function populateIssueGrid() {
     var issueUpdateStatus = getIssueUpdateStatus(issue);
 
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issue.region + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + (issue.region || 'no-region') + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '" target=”_blank”>' + issue.key + '</a>' +
@@ -212,9 +216,10 @@ function populateIssueGrid() {
     );
 
     var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
+    var issueRegion = issue.region || 'no-region';
 
-    if ((issue.region) && (assignees[issue.region].indexOf(assignee) < 0)) {
-      assignees[issue.region].push(assignee);
+    if (assignees[issueRegion].indexOf(assignee) < 0) {
+      assignees[issueRegion].push(assignee);
     }
   });
 }
