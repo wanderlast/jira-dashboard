@@ -198,10 +198,11 @@ function getIssueUpdateStatus(issue) {
 
 function populateIssueGrid() {
   issues.forEach(function(issue) {
+    var issueRegion = issue.region || 'no-region';
     var issueUpdateStatus = getIssueUpdateStatus(issue);
 
     grid.append(
-      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + (issue.region || 'no-region') + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
+      '<div class="issue-element ' + issue.issueType + ' ' + issue.priority + ' ' + (issue.status === "Blocked" ? 'blocked ' : '') + (issue.flagged ? 'flagged ' : '') + issueRegion + ' ' + issue.assignee + ' ' + issueUpdateStatus + '">' +
         '<div class="issue-update issue-' + issueUpdateStatus + '"/>' +
         '<div class="issue-details">' +
           '<a href="https://issues.liferay.com/browse/' + issue.key + '" target=”_blank”>' + issue.key + '</a>' +
@@ -216,7 +217,6 @@ function populateIssueGrid() {
     );
 
     var assignee = "." + issue.assignee + "|" + issue.assigneeDisplayName;
-    var issueRegion = issue.region || 'no-region';
 
     if (assignees[issueRegion].indexOf(assignee) < 0) {
       assignees[issueRegion].push(assignee);
